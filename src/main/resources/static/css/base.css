@@ -1,0 +1,23 @@
+.logo img {
+    margin: 10px auto;
+}
+
+.btn-checked {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    margin: 4px 4px;
+}
+
+.btn-uncheck {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+    margin: 4px 4px;
+}
+
+@media only screen and (min-width: 768px) {
+    .left-line {
+        border-left: #cdc6cd 1px solid;
+    }
+}
