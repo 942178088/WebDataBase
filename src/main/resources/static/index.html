@@ -19,7 +19,7 @@
     <![endif]-->
 </head>
 <body>
-<div class="container">
+<div id="vue" class="container">
     <div class="row">
 
         <div class="col-sm-12 text-center logo">
@@ -33,28 +33,28 @@
         </div>
 
         <div class="col-sm-3">
-            <div class="form-group">
-                <button class="btn btn-uncheck">浙江</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
-                <button class="btn btn-uncheck">北京</button>
+            <div class="menu">
+                <p>
+                    <span class="label label-default menu-label">地区</span>
+                </p>
+                <location-list v-for="location in locations" v-bind:location="location"></location-list>
+            </div>
+            <div class="menu">
+                <p>
+                    <span class="label label-default menu-label">院校特性</span>
+                </p>
+                <button class="btn btn-uncheck">985院校</button>
+                <button class="btn btn-uncheck">211院校</button>
+                <button class="btn btn-uncheck">研究生院</button>
+                <button class="btn btn-uncheck">自划线院校</button>
+            </div>
+            <div class="menu">
+                <p>
+                    <span class="label label-default menu-label">院校隶属</span>
+                </p>
+                <button class="btn btn-uncheck">教育部</button>
+                <button class="btn btn-uncheck">其他部委</button>
+                <button class="btn btn-uncheck">地方</button>
             </div>
         </div>
 
@@ -86,6 +86,9 @@
 </div>
 
 
+<!-- Vue.js -->
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>-->
 <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->

@@ -1,5 +1,27 @@
+window.setInterval(check, 100);
 
-check();
+var vue = new Vue({
+    el: '#vue',
+    data: {
+        locations: [],
+    },
+    components: {
+        'location-list': {
+            props: ['location'],
+            template: '<transition name="fade"><button class="btn btn-uncheck">{{location.name}}</button></transition>',
+        },
+    },
+    created: function () {
+        $.ajax({
+            url: 'location/list',
+            type: 'GET',
+            async: true,
+            success: function (data) {
+                vue.locations = data;
+            }
+        })
+    },
+})
 
 $(document).on("click", "button", function () {
     check();
