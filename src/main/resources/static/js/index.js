@@ -1,3 +1,7 @@
+var locations = [
+    1,3,4,5
+]
+
 window.setInterval(check, 100);
 
 var vue = new Vue({
