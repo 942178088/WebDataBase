@@ -6,9 +6,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 
-
+/**
+ * 院校 数据层
+ */
 public interface CollegeDao extends PagingAndSortingRepository<College, Integer> {
-
+    /**
+     * 查询地区对应的院校
+     *
+     * @param id 地区ID
+     * @return 院校列表
+     */
     @Query(value = "select  * from locations a where a.id = ?1", nativeQuery = true)
     Location findByLocationId(int id);
 }
