@@ -24,6 +24,7 @@ public class College {
     @Column(nullable = false)
     private Date foundingYear; // 创建时间
     @Column(nullable = false)
+    @ManyToOne(cascade = {CascadeType.MERGE},fetch = FetchType.EAGER,targetEntity = Location.class,optional = false)
     private Location location; // 所在地 多对一
     // 院校隶属（全部，教育部，其他部委，地方）
     // 院校特性（985高校，211高校，研究生院，自划线院校）

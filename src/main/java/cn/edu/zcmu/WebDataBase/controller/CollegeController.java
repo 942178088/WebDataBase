@@ -1,5 +1,6 @@
 package cn.edu.zcmu.WebDataBase.controller;
 
+import cn.edu.zcmu.WebDataBase.entity.College;
 import cn.edu.zcmu.WebDataBase.entity.Location;
 import cn.edu.zcmu.WebDataBase.service.CollegeService;
 import org.springframework.stereotype.Controller;
@@ -17,8 +18,8 @@ public class CollegeController extends BaseController{
 
     @ResponseBody
     @RequestMapping(value = "list",method = RequestMethod.GET)
-    public List<Location> findById(int id[]){
-        List<Location> locations = collegeService.findById(id);
-        return locations;
+    public List<College> findById(int id[]){
+        List<College> colleges = collegeService.findById(id);
+        return colleges;
     }
 }

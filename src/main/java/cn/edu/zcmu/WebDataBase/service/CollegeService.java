@@ -1,7 +1,7 @@
 package cn.edu.zcmu.WebDataBase.service;
 
 import cn.edu.zcmu.WebDataBase.dao.CollegeDao;
-import cn.edu.zcmu.WebDataBase.entity.Location;
+import cn.edu.zcmu.WebDataBase.entity.College;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,11 +18,11 @@ public class CollegeService extends BaseService{
      * 查询数据库相关内容
      * 返回List 地区
      */
-    public List<Location> findById(int id[]){
-        List<Location> locations = new ArrayList();
+    public List<College> findById(int id[]){
+        List<College> colleges = new ArrayList();
         for(int i = 0;i<id.length;i++){
-            locations.add(collegeDao.findByLocationId(id[i]));
+            colleges.add(collegeDao.findByLocationId(id[i]));
         }
-        return locations;
+        return colleges;
     }
 }
