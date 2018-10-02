@@ -23,7 +23,6 @@ public class College {
     private String badgeUrl; // 校徽 图片URL
     @Column(nullable = false)
     private Date foundingYear; // 创建时间
-    @Column(nullable = false)
     @ManyToOne(cascade = {CascadeType.MERGE},fetch = FetchType.EAGER,targetEntity = Location.class,optional = false)
     private Location location; // 所在地 多对一
     // 院校隶属（全部，教育部，其他部委，地方）

@@ -15,6 +15,6 @@ public interface CollegeDao extends PagingAndSortingRepository<College, Integer>
      * @param id 地区ID
      * @return 院校列表
      */
-    @Query(value = "select  * from colleges a where a.id = ?1", nativeQuery = true)
+    @Query(value = "select  * from colleges c where c.location_id = ?1", nativeQuery = true)
     College findByLocationId(int id);
 }
