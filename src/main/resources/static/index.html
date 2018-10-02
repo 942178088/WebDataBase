@@ -37,7 +37,8 @@
                 <p>
                     <span class="label label-default menu-label">地区</span>
                 </p>
-                <location-list v-for="location in locations" v-bind:location="location"></location-list>
+                <location-list v-for="location in locations" v-bind:location="location"
+                               v-bind:key="location.id"></location-list>
             </div>
             <div class="menu">
                 <p>
@@ -59,28 +60,11 @@
         </div>
 
         <div class="col-sm-9 left-line">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <td>ces</td>
-                    <td>ces</td>
-                    <td>ces</td>
-                    <td>ces</td>
-                </tr>
-                </thead>
-                <tr>
-                    <td>测试机哦</td>
-                    <td>测试机哦</td>
-                    <td>测试机哦</td>
-                    <td>测试机哦</td>
-                </tr>
-                <tr>
-                    <td>测试机哦</td>
-                    <td>测试机哦</td>
-                    <td>测试机哦</td>
-                    <td>测试机哦</td>
-                </tr>
-            </table>
+            <college-list v-for="college in colleges"
+                          v-bind:college="college"
+                          v-bind:key="college.id">
+            </college-list>
+
         </div>
     </div>
 
@@ -88,8 +72,8 @@
 
 
 <!-- Vue.js -->
-<script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<!--<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/vue"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->

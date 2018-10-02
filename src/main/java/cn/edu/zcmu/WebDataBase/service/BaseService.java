@@ -1,8 +1,10 @@
 package cn.edu.zcmu.WebDataBase.service;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -10,6 +12,30 @@ import java.security.NoSuchAlgorithmException;
  * 基础 服务层
  */
 public class BaseService {
+
+    /**
+     * 提取request中的json
+     *
+     * @param request
+     * @return
+     */
+    public static String getJson(HttpServletRequest request) {
+        String str = "NULL";
+        try {
+            ServletInputStream is = request.getInputStream();
+            int nRead = 1;
+            int nTotalRead = 0;
+            byte[] bytes = new byte[10240];
+            while (nRead > 0) {
+                nRead = is.read(bytes, nTotalRead, bytes.length - nTotalRead);
+                if (nRead > 0) nTotalRead = nTotalRead + nRead;
+            }
+            str = new String(bytes, 0, nTotalRead, "utf-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
 
     /**
      * cookie 创建
