@@ -1,10 +1,12 @@
 // 选中的地区列表
 var locations = {
-    id: [4,5,6]
+    id: [],
 };
 
+// 狗屎的事件绑定
 window.setInterval(check, 100);
 
+// vue.js
 var vue = new Vue({
     el: '#vue',
     data: {
@@ -14,7 +16,7 @@ var vue = new Vue({
     components: {
         'location-list': {
             props: ['location'],
-            template: '<transition name="fade"><button class="btn btn-uncheck">{{location.name}}</button></transition>',
+            template: '<transition name="fade"><button :id="location.id" class="btn btn-uncheck" onclick="add(this.id)">{{location.name}}</button></transition>',
         },
         'college-list': {
             props: ['college'],
@@ -30,18 +32,6 @@ var vue = new Vue({
                 vue.locations = data;
             }
         })
-        $.ajax({
-            url: 'college/byLocation',
-            type: 'POST',
-            data: JSON.stringify(locations),
-            dataType: 'json',
-            contentType: "application/json",
-            traditional: true,
-            async: true,
-            success: function (data) {
-                vue.colleges = data;
-            },
-        })
     },
 })
 
@@ -49,6 +39,43 @@ $(document).on("click", "button", function () {
     check();
 });
 
+// 根据地区加载院校
+function loadByLocation() {
+    if (locations.id.length == 0)
+        vue.colleges = ""
+    else
+        $.ajax({
+            url: 'college/byLocation',
+            type: 'POST',
+            data: JSON.stringify(locations),
+            dataType: 'json',
+            contentType: "application/json",
+            traditional: true,
+            success: function (data) {
+                vue.colleges = data;
+            },
+        })
+}
+
+// 选中的地区
+function add(id) {
+    id = parseInt(id);
+    var ids = locations.id;
+    var i = 0;
+    for (; i < ids.length; i++) {
+        if (ids[i] == id)
+            break;
+    }
+    if (i == ids.length) {
+        ids.push(id);
+    } else {
+        if (i > -1) ids.splice(i, 1);
+    }
+    locations.id = ids;
+    loadByLocation();
+}
+
+// 事件绑定
 function check() {
     $("button.btn-checked").click(function () {
         $(this).addClass("btn-uncheck");

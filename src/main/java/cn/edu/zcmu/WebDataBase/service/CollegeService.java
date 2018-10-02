@@ -1,6 +1,7 @@
 package cn.edu.zcmu.WebDataBase.service;
 
 import cn.edu.zcmu.WebDataBase.dao.CollegeDao;
+import cn.edu.zcmu.WebDataBase.dao.LocationDao;
 import cn.edu.zcmu.WebDataBase.entity.College;
 import cn.edu.zcmu.WebDataBase.entity.Location;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,8 @@ import java.util.List;
 public class CollegeService extends BaseService {
     @Resource
     private CollegeDao collegeDao;
+    @Resource
+    private LocationDao locationDao;
 
     /**
      * 根据地区ID列表查询院校
@@ -40,12 +43,21 @@ public class CollegeService extends BaseService {
                 "武汉大学", "华中科技大学", "湖南大学", "中南大学", "中山大学",
                 "华南理工大学", "四川大学", "电子科技大学", "重庆大学", "西安交通大学",
                 "西北工业大学", "兰州大学"};
+        String[] locations = {
+                "浙江", "北京", "上海", "浙江", "浙江"
+                , "浙江", "北京", "北京", "北京", "北京"
+                , "北京", "北京", "天津", "天津", "辽宁"
+                , "辽宁", "吉林", "黑龙江", "上海", "上海"
+                , "江苏", "江苏", "安徽", "江苏", "江苏"
+                , "辽宁", "吉林", "黑龙江", "上海", "上海"
+                , "辽宁", "吉林", "黑龙江", "上海", "上海"
+                , "辽宁", "吉林"
+        };
         for (int i = 0; i < names.length; i++) {
             College college = new College();
             college.setName(names[i]);
             college.setEnglishName(names[i]);
-            Location location = new Location();
-            location.setId(1);
+            Location location = locationDao.findByName(locations[i]);
             college.setLocation(location);
             college.setAbbrEnglishName(names[i]);
             college.setAbbrName(names[i]);

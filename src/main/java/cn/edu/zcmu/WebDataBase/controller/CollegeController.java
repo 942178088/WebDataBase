@@ -40,11 +40,15 @@ public class CollegeController extends BaseController {
         }
         // 分离数组左右的 []
         json = json.substring(1, json.length() - 1);
+        if (json.equals(""))
+            return null;
         // 分离id
         String[] ids = json.split(",");
         // 组装id数组
         int[] id = new int[ids.length];
         for (int i = 0; i < id.length; i++) {
+            if (ids[i].trim().equals(""))
+                continue;
             id[i] = Integer.parseInt(ids[i].trim());
         }
         // 查询并返回数据
