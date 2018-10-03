@@ -37,8 +37,10 @@
                 <p>
                     <span class="label label-default menu-label">地区</span>
                 </p>
-                <location-list v-for="location in locations" v-bind:location="location"
-                               v-bind:key="location.id"></location-list>
+                <location-list v-for="location in locations"
+                               v-bind:location="location"
+                               v-bind:key="location.id">
+                </location-list>
             </div>
             <div class="menu">
                 <p>
@@ -60,15 +62,72 @@
         </div>
 
         <div class="col-sm-9 left-line">
-            <college-list v-for="college in colleges"
-                          v-bind:college="college"
-                          v-bind:key="college.id">
-            </college-list>
-
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th v-for="column in columns">{{column.name}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="college in colleges">
+                        <td><img
+                                src="http://www.zcmu.edu.cn/__local/2/34/C7/4D7CC04F39CB23AAF719A472148_77901B6B_E400.jpg?e=.jpg"
+                                width="20px" height="20px"></td>
+                        <td>{{college.name}}</td>
+                        <td>{{college.foundingYear}}</td>
+                        <td>{{college.location.name}}</td>
+                    </tr>
+                    </tbody>
+                    <tfoot hidden>
+                    <tr>
+                        <td>条数：30</td>
+                        <td>总数：120</td>
+                        <td>页数：1</td>
+                        <td>总页：3</td>
+                    </tr>
+                    </tfoot>
+                </table>
+                <nav>
+                    <ul class="pager">
+                        <li class="previous">
+                            <a onclick="pageController(0)" href="javascript:void(0)">
+                                <span aria-hidden="true">
+                                    &larr;
+                                </span>
+                                首页
+                            </a>
+                        </li>
+                        <li class="previous">
+                            <a onclick="pageController(-1)" href="javascript:void(0)">
+                                上一页
+                            </a>
+                        </li>
+                        <li class="next">
+                            <a onclick="pageController(-2)" href="javascript:void(0)">
+                                末页
+                                <span aria-hidden="true">
+                                    &rarr;
+                                </span>
+                            </a>
+                        </li>
+                        <li class="next">
+                            <a onclick="pageController(1)" href="javascript:void(0)">
+                                下一页
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
 
 </div>
+
+<footer class="footer">
+    <p>陈健&nbsp;孟凡锦&nbsp;王浩银&nbsp;汪恒</p>
+    <p>所有数据均来自网络搜集，仅供参考</p>
+</footer>
 
 
 <!-- Vue.js -->
@@ -78,6 +137,7 @@
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="js/base.js"></script>
 <script src="js/index.js"></script>
 </body>
 </html>
