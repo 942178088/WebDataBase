@@ -1,7 +1,7 @@
 // 选中的地区列表
 var locations = {
     page: 1,
-    size: 15,
+    size: 20,
     totalPage: 9999,
     totalSize: 9999,
     id: [],
@@ -9,6 +9,7 @@ var locations = {
 
 // 上一页下一页
 function pageController(page) {
+    location.replace('#');
     // 下一页
     if (page == 1) {
         if (locations.page + 1 <= locations.totalPage)
@@ -32,18 +33,21 @@ function pageController(page) {
 
 // 根据地区加载院校
 function loadByLocation() {
+    location.replace('#');
     $.ajax({
-        url: 'college/byLocation?page=1?size=10',
+        url: 'college/byLocation',
         type: 'POST',
         data: JSON.stringify(locations),
         dataType: 'json',
         contentType: "application/json",
         traditional: true,
         success: function (data) {
-            if (data.length == 0)
-                vue.colleges = vue.colleges_null;
-            else
-                vue.colleges = formate(data);
+            var colleges = data.colleges;
+            if (colleges.length == 0) {
+                main.colleges = main.colleges_null;
+            } else {
+                main.colleges = formate(colleges);
+            }
         },
     })
 }
@@ -51,7 +55,11 @@ function loadByLocation() {
 // 格式化院校列表的详情链接与日期格式
 function formate(data) {
     for (var i = 0; i < data.length; i++) {
-        var time = Format(getDate(data[i].foundingYear.trim()), "yyyy")
+        if (data[i].ranking == -1)
+            data[i].ranking = '未知';
+        if (data[i].foundingYear == null)
+            continue;
+        var time = Format(getDate(data[i].foundingYear.trim()), "yyyy");
         data[i].foundingYear = time;
     }
     return data
@@ -77,25 +85,30 @@ function selectLocation(id) {
 }
 
 // vue.js
-var vue = new Vue({
-    el: '#vue',
+var main = new Vue({
+    el: '#main',
     data: {
         locations: [],
         columns: [
             {name: '校徽'},
             {name: '校名'},
+            {name: '代码'},
+            {name: '性质'},
+            {name: '类型'},
+            {name: '排名'},
             {name: '创立时间'},
-            {name: '所在地'}],
+            {name: '所在地'},
+        ],
         colleges: [],
         colleges_null: [{
             "id": '#',
             "name": "空",
-            "abbrName": "空",
-            "englishName": "空",
-            "abbrEnglishName": "空",
-            "badgeUrl": "空",
+            "cCode": "空",
+            "cNature": "空",
+            "cType": "空",
+            "ranking": "空",
             "foundingYear": "空",
-            "location": {"id": '#', "name": "空"}
+            "location": "空",
         }],
     },
     components: {
@@ -114,7 +127,7 @@ var vue = new Vue({
             type: 'GET',
             async: true,
             success: function (data) {
-                vue.locations = data;
+                main.locations = data.locations;
             }
         })
         loadByLocation();

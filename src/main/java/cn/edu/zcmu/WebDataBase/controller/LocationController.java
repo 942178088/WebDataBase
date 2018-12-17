@@ -2,10 +2,13 @@ package cn.edu.zcmu.WebDataBase.controller;
 
 import cn.edu.zcmu.WebDataBase.entity.Location;
 import cn.edu.zcmu.WebDataBase.service.LocationService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -19,6 +22,13 @@ import java.util.List;
 public class LocationController extends BaseController {
     @Resource
     private LocationService locationService;
+    private ObjectMapper mapper;
+    private ObjectNode json;
+
+    @Autowired
+    public LocationController(ObjectMapper mapper) {
+        this.mapper = mapper;
+    }
 
     /**
      * 获取地区列表
@@ -27,26 +37,17 @@ public class LocationController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public List<Location> list() {
-        List<Location> locations = locationService.findAll();
-        return locations;
-    }
-
-    /**
-     * 添加测试数据
-     *
-     * @return json
-     */
-    @ResponseBody
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public ObjectNode test() {
-        try {
-            locationService.testAddData();
-            objectNode.put("status", 0);
-        } catch (Exception e) {
-            objectNode.put("status", 1);
-            objectNode.put("message", e.getMessage());
+    public ObjectNode list() {
+        json = mapper.createObjectNode();
+        List<Location> locations = (List<Location>) locationService.findAll();
+        ArrayNode locationJsons = mapper.createArrayNode();
+        for (Location location : locations) {
+            ObjectNode locationJson = mapper.createObjectNode();
+            locationJson.put("id", location.getId());
+            locationJson.put("name", location.getName());
+            locationJsons.add(locationJson);
         }
-        return objectNode;
+        json.set("locations", locationJsons);
+        return json;
     }
 }

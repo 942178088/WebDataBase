@@ -15,7 +15,7 @@ public interface LocationDao extends PagingAndSortingRepository<Location, Intege
      * @param name
      * @return
      */
-    @Query(value = "select * from locations l where l.name = ?1", nativeQuery = true)
+    @Query(value = "select * from locations l where l.name = ?1 order by l.id", nativeQuery = true)
     Location findByName(String name);
 
 }

@@ -11,21 +11,30 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 public interface CollegeDao extends PagingAndSortingRepository<College, Integer> {
 
-	/**
-	 * 分页查询所有
-	 *
-	 * @param id 地区ID
-	 * @return 院校列表
-	 */
-	@Query(value = "select  * from colleges c", nativeQuery = true)
-	Page<College> findAll(int[] id, Pageable pageable);
+    /**
+     * 根据名称查询
+     *
+     * @param name
+     * @return
+     */
+    @Query(value = "select  * from colleges c where c.name = ?1", nativeQuery = true)
+    College findByName(String name);
 
-	/**
-	 * 分页查询地区对应的院校
-	 *
-	 * @param id 地区ID
-	 * @return 院校列表
-	 */
-	@Query(value = "select  * from colleges c where c.location_id in ?1", nativeQuery = true)
-	Page<College> findByLocationId(int[] id, Pageable pageable);
+    /**
+     * 分页查询所有
+     *
+     * @param id 地区ID
+     * @return 院校列表
+     */
+    @Query(value = "select  * from colleges c", nativeQuery = true)
+    Page<College> findAll(int[] id, Pageable pageable);
+
+    /**
+     * 分页查询地区对应的院校
+     *
+     * @param id 地区ID
+     * @return 院校列表
+     */
+    @Query(value = "select  * from colleges c where c.location_id in ?1", nativeQuery = true)
+    Page<College> findByLocationId(int[] id, Pageable pageable);
 }
