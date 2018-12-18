@@ -2,9 +2,10 @@ package cn.edu.zcmu.WebDataBase.entity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
- * 院校实体类
+ * 院校 实体类
  */
 @Entity
 @Table(name = "COLLEGES")
@@ -16,7 +17,8 @@ public class College {
     private String name; // 中文名称
     private String cCode; // 代码
     private String cPartition; // 所处分区
-    private String cNature; // 性质
+    @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Nature.class, optional = false)
+    private Nature cNature; // 性质
     private String cType; // 类型
     private Integer ranking; // 排名
     private Integer areaCompetitiveRanking; // 地区竞争力排行
@@ -28,29 +30,8 @@ public class College {
     private Date foundingYear; // 创建时间
     @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Location.class, optional = false)
     private Location location; // 所在地 多对一
-    // 院校隶属（全部，教育部，其他部委，地方）
-    // 院校特性（985高校，211高校，研究生院，自划线院校）
-
-    @Override
-    public String toString() {
-        return "College{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", cCode='" + cCode + '\'' +
-                ", cPartition='" + cPartition + '\'' +
-                ", cNature='" + cNature + '\'' +
-                ", cType='" + cType + '\'' +
-                ", ranking=" + ranking +
-                ", areaCompetitiveRanking=" + areaCompetitiveRanking +
-                ", collegesCompetitiveRanking=" + collegesCompetitiveRanking +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", badgeUrl='" + badgeUrl + '\'' +
-                ", imgUrl='" + imgUrl + '\'' +
-                ", cDescription='" + cDescription + '\'' +
-                ", foundingYear=" + foundingYear +
-                ", location=" + location +
-                '}';
-    }
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Speciality.class)
+    private List<Speciality> specialities; // 院校特性（985高校，211高校，研究生院，自划线院校）
 
     public Integer getId() {
         return id;
@@ -84,11 +65,11 @@ public class College {
         this.cPartition = cPartition;
     }
 
-    public String getcNature() {
+    public Nature getcNature() {
         return cNature;
     }
 
-    public void setcNature(String cNature) {
+    public void setcNature(Nature cNature) {
         this.cNature = cNature;
     }
 
@@ -170,5 +151,13 @@ public class College {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public List<Speciality> getSpecialities() {
+        return specialities;
+    }
+
+    public void setSpecialities(List<Speciality> specialities) {
+        this.specialities = specialities;
     }
 }

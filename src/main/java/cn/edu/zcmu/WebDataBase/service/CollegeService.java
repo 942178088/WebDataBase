@@ -9,7 +9,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
 /**
- * 大学类
+ * 院校 服务层
  */
 @Service
 public class CollegeService extends BaseService<College, Integer> {
@@ -23,15 +23,9 @@ public class CollegeService extends BaseService<College, Integer> {
 
     /**
      * 根据地区ID列表查询院校
-     *
-     * @param id   地区ID列表
-     * @return 院校列表
      */
     public Page<College> findByLocationId(int[] id, Pageable pageable) {
-        if (id == null)
-            return collegeDao.findAll(pageable);
-        else
-            return collegeDao.findByLocationId(id, pageable);
+        return collegeDao.findByLocationId(id, pageable);
     }
 
 }

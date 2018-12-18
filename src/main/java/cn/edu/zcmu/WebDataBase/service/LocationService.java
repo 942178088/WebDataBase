@@ -19,14 +19,4 @@ public class LocationService extends BaseService<Location, Integer> {
         return locationDao;
     }
 
-    /**
-     * 根据名称返回地区
-     *
-     * @param name
-     * @return
-     */
-    public Location findByName(String name) {
-        return locationDao.findByName(name);
-    }
-
 }

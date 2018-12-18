@@ -24,6 +24,12 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 公用基础 服务层
+ *
+ * @param <T>  实体类类型
+ * @param <ID> 一般为Integer
+ */
 public abstract class BaseService<T, ID> {
     private static String DOMAIN; // 域名
     private static String KEY; // KEY

@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * 院校控制层
+ * 院校 控制层
  */
 @Controller
 @RequestMapping("/college")
@@ -47,7 +47,7 @@ public class CollegeController extends BaseController {
             collegeJson.put("id", college.getId());
             collegeJson.put("name", college.getName());
             collegeJson.put("cCode", college.getcCode());
-            collegeJson.put("cNature", college.getcNature());
+            collegeJson.put("cNature", college.getcNature().getName());
             collegeJson.put("cType", college.getcType());
             collegeJson.put("ranking", college.getRanking());
             if (college.getFoundingYear() != null) {
@@ -99,7 +99,7 @@ public class CollegeController extends BaseController {
             collegeJson.put("id", college.getId());
             collegeJson.put("name", college.getName());
             collegeJson.put("cCode", college.getcCode());
-            collegeJson.put("cNature", college.getcNature());
+            collegeJson.put("cNature", college.getcNature().getName());
             collegeJson.put("cType", college.getcType());
             collegeJson.put("ranking", college.getRanking());
             if (college.getFoundingYear() != null) {

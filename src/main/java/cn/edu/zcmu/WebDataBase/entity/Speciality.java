@@ -3,11 +3,12 @@ package cn.edu.zcmu.WebDataBase.entity;
 import javax.persistence.*;
 
 /**
- * 地区 实体类
+ * 院校特性 实体类
+ * 院校特性（985高校，211高校，研究生院，自划线院校）
  */
 @Entity
-@Table(name = "LOCATIONS")
-public class Location {
+@Table(name = "SPECIALITY")
+public class Speciality {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -29,5 +30,4 @@ public class Location {
     public void setName(String name) {
         this.name = name;
     }
-
 }

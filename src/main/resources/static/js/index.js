@@ -6,6 +6,8 @@ var main = new Vue({
         total_pages: 1,
         total_elements: 1,
         location_data: [],
+        speciality_data: [],
+        nature_data: [],
         college_data: [],
         select_location_data: {
             id: [],
@@ -38,6 +40,20 @@ var main = new Vue({
                 '{{location.name}}\n' +
                 '</button>',
         },
+        'speciality_list': {
+            props: ['speciality'],
+            template:
+                '<button :id="speciality.id" class="btn btn-uncheck" onclick="selectSpeciality(this.id)">\n    ' +
+                '{{speciality.name}}\n' +
+                '</button>',
+        },
+        'nature_list': {
+            props: ['nature'],
+            template:
+                '<button :id="nature.id" class="btn btn-uncheck" onclick="selectNature(this.id)">\n    ' +
+                '{{nature.name}}\n' +
+                '</button>',
+        },
         'college_list': {
             props: ['college'],
             template:
@@ -54,14 +70,40 @@ var main = new Vue({
         $.ajax({
             url: 'location/list',
             type: 'GET',
-            async: true,
             success: function (data) {
                 main.location_data = data.locations;
+            }
+        });
+        // 加载特性列表 985 211
+        $.ajax({
+            url: 'speciality/list',
+            type: 'GET',
+            success: function (data) {
+                main.speciality_data = data.specialities;
+                loadCollege();
+            }
+        });
+        // 加载性质列表 综合 理工
+        $.ajax({
+            url: 'nature/list',
+            type: 'GET',
+            success: function (data) {
+                main.nature_data = data.natures;
                 loadCollege();
             }
         });
     },
 });
+
+// 选中性质
+function selectNature(id) {
+
+}
+
+// 选中特性
+function selectSpeciality(id) {
+
+}
 
 // 选中地区
 function selectLocation(id) {

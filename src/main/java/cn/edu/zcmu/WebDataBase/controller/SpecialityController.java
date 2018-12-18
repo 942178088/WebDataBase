@@ -1,7 +1,7 @@
 package cn.edu.zcmu.WebDataBase.controller;
 
-import cn.edu.zcmu.WebDataBase.entity.Location;
-import cn.edu.zcmu.WebDataBase.service.LocationService;
+import cn.edu.zcmu.WebDataBase.entity.Speciality;
+import cn.edu.zcmu.WebDataBase.service.SpecialityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -15,37 +15,39 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 地区 控制层
+ * 院校特性 控制层
  */
 @Controller
-@RequestMapping("/location")
-public class LocationController extends BaseController {
+@RequestMapping("/speciality")
+public class SpecialityController extends BaseController {
     @Resource
-    private LocationService locationService;
+    private SpecialityService specialityService;
+
     private ObjectMapper mapper;
     private ObjectNode json;
 
     @Autowired
-    public LocationController(ObjectMapper mapper) {
+    public SpecialityController(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 
+
     /**
-     * 获取地区列表
+     * 获取院校特性列表
      */
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ObjectNode list() {
         json = mapper.createObjectNode();
-        List<Location> locations = (List<Location>) locationService.findAll();
-        ArrayNode locationJsons = mapper.createArrayNode();
-        for (Location location : locations) {
-            ObjectNode locationJson = mapper.createObjectNode();
-            locationJson.put("id", location.getId());
-            locationJson.put("name", location.getName());
-            locationJsons.add(locationJson);
+        List<Speciality> specialities = (List<Speciality>) specialityService.findAll();
+        ArrayNode specialityJsons = mapper.createArrayNode();
+        for (Speciality speciality : specialities) {
+            ObjectNode specialityJson = mapper.createObjectNode();
+            specialityJson.put("id", speciality.getId());
+            specialityJson.put("name", speciality.getName());
+            specialityJsons.add(specialityJson);
         }
-        json.set("locations", locationJsons);
+        json.set("specialities", specialityJsons);
         return json;
     }
 }

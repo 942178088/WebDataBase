@@ -1,7 +1,7 @@
 package cn.edu.zcmu.WebDataBase.controller;
 
-import cn.edu.zcmu.WebDataBase.entity.Location;
-import cn.edu.zcmu.WebDataBase.service.LocationService;
+import cn.edu.zcmu.WebDataBase.entity.Nature;
+import cn.edu.zcmu.WebDataBase.service.NatureService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -15,37 +15,38 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 地区 控制层
+ * 院校特性 控制层
  */
 @Controller
-@RequestMapping("/location")
-public class LocationController extends BaseController {
+@RequestMapping("/nature")
+public class NatureController extends BaseController {
     @Resource
-    private LocationService locationService;
+    private NatureService natureService;
+
     private ObjectMapper mapper;
     private ObjectNode json;
 
     @Autowired
-    public LocationController(ObjectMapper mapper) {
+    public NatureController(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 
     /**
-     * 获取地区列表
+     * 获取院校特性列表
      */
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ObjectNode list() {
         json = mapper.createObjectNode();
-        List<Location> locations = (List<Location>) locationService.findAll();
-        ArrayNode locationJsons = mapper.createArrayNode();
-        for (Location location : locations) {
-            ObjectNode locationJson = mapper.createObjectNode();
-            locationJson.put("id", location.getId());
-            locationJson.put("name", location.getName());
-            locationJsons.add(locationJson);
+        List<Nature> natures = (List<Nature>) natureService.findAll();
+        ArrayNode specialityJsons = mapper.createArrayNode();
+        for (Nature nature : natures) {
+            ObjectNode specialityJson = mapper.createObjectNode();
+            specialityJson.put("id", nature.getId());
+            specialityJson.put("name", nature.getName());
+            specialityJsons.add(specialityJson);
         }
-        json.set("locations", locationJsons);
+        json.set("natures", specialityJsons);
         return json;
     }
 }

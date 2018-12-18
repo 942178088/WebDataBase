@@ -17,7 +17,7 @@ public interface CollegeDao extends PagingAndSortingRepository<College, Integer>
      * @param name
      * @return
      */
-    @Query(value = "select  * from colleges c where c.name = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM colleges c WHERE c.name = ?1", nativeQuery = true)
     College findByName(String name);
 
     /**
@@ -26,7 +26,7 @@ public interface CollegeDao extends PagingAndSortingRepository<College, Integer>
      * @param id 地区ID
      * @return 院校列表
      */
-    @Query(value = "select  * from colleges c", nativeQuery = true)
+    @Query(value = "SELECT * FROM colleges c", nativeQuery = true)
     Page<College> findAll(int[] id, Pageable pageable);
 
     /**
@@ -35,6 +35,6 @@ public interface CollegeDao extends PagingAndSortingRepository<College, Integer>
      * @param id 地区ID
      * @return 院校列表
      */
-    @Query(value = "select  * from colleges c where c.location_id in ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM colleges c WHERE c.location_id IN ?1", nativeQuery = true)
     Page<College> findByLocationId(int[] id, Pageable pageable);
 }

@@ -42,10 +42,19 @@
                 <p>
                     <span class="label label-default menu-label">院校特性</span>
                 </p>
-                <button class="btn btn-uncheck">985院校</button>
-                <button class="btn btn-uncheck">211院校</button>
-                <button class="btn btn-uncheck">研究生院</button>
-                <button class="btn btn-uncheck">自划线院校</button>
+                <speciality_list v-for="speciality in speciality_data"
+                                 v-bind:speciality="speciality"
+                                 v-bind:key="speciality.id">
+                </speciality_list>
+            </div>
+            <div class="menu">
+                <p>
+                    <span class="label label-default menu-label">院校性质</span>
+                </p>
+                <nature_list v-for="nature in nature_data"
+                             v-bind:nature="nature"
+                             v-bind:key="nature.id">
+                </nature_list>
             </div>
             <div class="menu">
                 <p>
