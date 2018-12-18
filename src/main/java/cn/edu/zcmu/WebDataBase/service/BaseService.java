@@ -459,7 +459,7 @@ public abstract class BaseService<T, ID> {
      * @param direction 排序
      * @return
      */
-    public Sort buildSort(String attribute, String direction) {
+    public static Sort buildSort(String attribute, String direction) {
         switch (direction) {
             case "ASC": // 升序
                 return new Sort(Sort.Direction.ASC, attribute);

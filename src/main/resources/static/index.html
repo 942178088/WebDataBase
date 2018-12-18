@@ -4,15 +4,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>主页 - 考研数据库</title>
 
-    <!-- Bootstrap -->
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/base.css" rel="stylesheet">
 
-    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
-    <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
     <!--[if lt IE 9]>
     <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
@@ -37,10 +33,10 @@
                 <p>
                     <span class="label label-default menu-label">地区</span>
                 </p>
-                <location-list v-for="location in locations"
+                <location_list v-for="location in location_data"
                                v-bind:location="location"
                                v-bind:key="location.id">
-                </location-list>
+                </location_list>
             </div>
             <div class="menu">
                 <p>
@@ -70,11 +66,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="college in colleges">
-                        <td>
-                            <img src="img/zcmu_logo.jpg"
-                                 width="20px" height="20px">
-                        </td>
+                    <tr v-for="college in college_data">
                         <td>{{college.name}}</td>
                         <td>{{college.cCode}}</td>
                         <td>{{college.cNature}}</td>
@@ -84,12 +76,21 @@
                         <td>{{college.location}}</td>
                     </tr>
                     </tbody>
-                    <tfoot hidden>
+                    <tfoot>
                     <tr>
-                        <td>条数：30</td>
-                        <td>总数：120</td>
-                        <td>页数：1</td>
-                        <td>总页：3</td>
+                        <td colspan="3">页数：{{page}} / {{total_pages}}</td>
+                        <td colspan="2">总条数：{{total_elements}}</td>
+                        <td colspan="2">
+                            每页条数：
+                            <select id="page_size_select">
+                                <option value="10">10</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="500">500</option>
+                                <option value="1000">1000</option>
+                            </select>
+                        </td>
+
                     </tr>
                     </tfoot>
                 </table>
@@ -97,28 +98,29 @@
                     <ul class="pager">
                         <li class="previous">
                             <a onclick="pageController(0)" href="javascript:void(0)">
-                                <span aria-hidden="true">
-                                    &larr;
-                                </span>
                                 首页
                             </a>
                         </li>
                         <li class="previous">
                             <a onclick="pageController(-1)" href="javascript:void(0)">
+                                <span aria-hidden="true">
+                                    &larr;
+                                </span>
                                 上一页
                             </a>
                         </li>
                         <li class="next">
                             <a onclick="pageController(-2)" href="javascript:void(0)">
                                 末页
-                                <span aria-hidden="true">
-                                    &rarr;
-                                </span>
+
                             </a>
                         </li>
                         <li class="next">
                             <a onclick="pageController(1)" href="javascript:void(0)">
                                 下一页
+                                <span aria-hidden="true">
+                                    &rarr;
+                                </span>
                             </a>
                         </li>
                     </ul>
@@ -178,14 +180,9 @@
     }, 100)
 }();
 </script>
-
-
-<!-- Vue.js -->
 <script src="js/vue.js"></script>
 <!--<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>-->
-<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="js/base.js"></script>
 <script src="js/index.js"></script>
