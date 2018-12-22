@@ -46,8 +46,13 @@ public class CollegeController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/list")
-    public ObjectNode list(Integer page, Integer size) {
-        Page<College> colleges = collegeService.findAll(BaseService.buildPageable(page, size, BaseService.buildSort("id", "ASC")));
+    public ObjectNode list(String keyword, Integer page, Integer size) {
+        Page<College> colleges;
+        if (!BaseService.checkNullStr(keyword)) {
+            colleges = collegeService.findAllByNameAndCode(keyword, BaseService.buildPageable(page, size, BaseService.buildSort("id", "ASC")));
+        } else {
+            colleges = collegeService.findAll(BaseService.buildPageable(page, size, BaseService.buildSort("id", "ASC")));
+        }
         json = mapper.createObjectNode();
         ArrayNode collegeJsons = mapper.createArrayNode();
         for (College college : colleges.getContent()) {
@@ -76,7 +81,7 @@ public class CollegeController extends BaseController {
      */
     @ResponseBody
     @RequestMapping(value = "/index")
-    public ObjectNode findByLocationId(Integer page, Integer size, HttpServletRequest request) {
+    public ObjectNode index(String keyword, Integer page, Integer size, HttpServletRequest request) {
         Page<College> colleges = null;
         json = mapper.createObjectNode();
         Integer[] locationId;
@@ -145,7 +150,7 @@ public class CollegeController extends BaseController {
                     typeId[i] = Integer.parseInt(typeIds[i].trim());
                 }
             }
-            colleges = collegeService.index(locationId, natureId, specialityId, typeId,
+            colleges = collegeService.index(locationId, natureId, specialityId, typeId, keyword,
                     BaseService.buildPageable(page, size, BaseService.buildSort("id", "ASC")));
         } catch (JSONException e) {
             json.put(STATUS_NAME, STATUS_CODE_EXCEPTION);

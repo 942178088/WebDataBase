@@ -24,8 +24,13 @@ public class CollegeService extends BaseService<College, Integer> {
     }
 
     /**
-     * 查询全部ID列表
+     * 根据名称或代码搜索
      */
+    public Page<College> findAllByNameAndCode(String keyword,
+                                              Pageable pageable) {
+        return collegeDao.findByNameOrCode(keyword,pageable);
+    }
+
     /**
      * 查询全部ID列表
      */
@@ -45,6 +50,7 @@ public class CollegeService extends BaseService<College, Integer> {
      * @param natureId     性质ID列表
      * @param specialityId 特性ID列表
      * @param typeId       类别ID列表
+     * @param keyword      搜索关键词
      * @param pageable     分页查询
      * @return 分页类
      */
@@ -52,8 +58,9 @@ public class CollegeService extends BaseService<College, Integer> {
                                Integer[] natureId,
                                Integer[] specialityId,
                                Integer[] typeId,
+                               String keyword,
                                Pageable pageable) {
-        return collegeDao.index(locationId, natureId, specialityId, typeId, pageable);
+        return collegeDao.index(locationId, natureId, specialityId, typeId, keyword, pageable);
     }
 
 }

@@ -189,17 +189,21 @@ function selectLocation(id) {
     loadCollege();
 }
 
-// 根据地区加载院校
+// 加载院校
 function loadCollege() {
+    var keyword = $("#search_keyword").val().trim();
+    if (checkNullStr(keyword)) {
+        keyword = '';
+    }
     location.replace('#');
     var url = '';
     if (main.select_data.location_id.length == 0 &&
         main.select_data.type_id.length == 0 &&
         main.select_data.speciality_id == 0 &&
         main.select_data.nature_id == 0) {
-        url = 'college/list?page=' + main.page + '&size=' + main.size;
+        url = 'college/list?keyword=' + keyword + '&page=' + main.page + '&size=' + main.size;
     } else {
-        url = 'college/index?page=' + main.page + '&size=' + main.size;
+        url = 'college/index?keyword=' + keyword + '&page=' + main.page + '&size=' + main.size;
     }
     $.ajax({
         url: url,
@@ -218,7 +222,8 @@ function loadCollege() {
             main.total_elements = data.total_elements;
             main.total_pages = data.total_pages;
         },
-    })
+    });
+    return false;
 }
 
 // 上一页下一页
@@ -282,3 +287,10 @@ function bind() {
         $(this).removeClass("btn-uncheck");
     });
 }
+
+// 回车搜索
+$("input").keydown(function (e) {//当按下按键时
+    if (e.which == 13) {//.which属性判断按下的是哪个键，回车键的键位序号为13
+        loadCollege();
+    }
+});

@@ -26,24 +26,23 @@ public interface CollegeDao extends PagingAndSortingRepository<College, Integer>
      * @param natureId     性质ID列表
      * @param specialityId 特性ID列表
      * @param typeId       类别ID列表
+     * @param keyword      搜索关键词
      * @param pageable     分页查询
      * @return
      */
-    @Query(value = "SELECT * FROM colleges colleage,colleges_specialities cs WHERE colleage.id = cs.college_id AND colleage.location_id IN ?1 AND colleage.c_nature_id IN ?2 AND colleage.c_type_id IN ?4 AND cs.specialities_id IN ?3 GROUP BY colleage.id", nativeQuery = true)
+    @Query(value = "SELECT * FROM colleges c WHERE (c.location_id IN ?1 AND c.c_nature_id IN ?2 AND c.c_type_id IN ?4 AND EXISTS(SELECT * FROM colleges_specialities cs WHERE c.id = cs.college_id AND cs.specialities_id IN ?3)) AND (c.name LIKE CONCAT('%',?5,'%') OR c.c_code LIKE CONCAT('%',?5,'%') OR c.location_id = (SELECT l.id FROM locations l WHERE l.name = ?5)) GROUP BY c.id", nativeQuery = true)
     Page<College> index(Integer[] locationId,
                         Integer[] natureId,
                         Integer[] specialityId,
                         Integer[] typeId,
+                        String keyword,
                         Pageable pageable);
 
     /**
-     * 根据名称查询
-     *
-     * @param name
-     * @return
+     * 根据名称或代码查询
      */
-    @Query(value = "SELECT * FROM colleges c WHERE c.name = ?1", nativeQuery = true)
-    College findByName(String name);
+    @Query(value = "SELECT * FROM colleges c WHERE c.name LIKE CONCAT('%',?1,'%') OR c.c_code LIKE CONCAT('%',?1,'%') OR c.location_id = (SELECT l.id FROM locations l WHERE l.name = ?1)", nativeQuery = true)
+    Page<College> findByNameOrCode(String name, Pageable pageable);
 
     /**
      * 分页查询所有
