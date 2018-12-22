@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * 院校特性 控制层
+ * 985，211
  */
 @Controller
 @RequestMapping("/speciality")

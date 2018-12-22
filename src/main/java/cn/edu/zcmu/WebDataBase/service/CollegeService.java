@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 院校 服务层
  */
@@ -22,10 +24,36 @@ public class CollegeService extends BaseService<College, Integer> {
     }
 
     /**
-     * 根据地区ID列表查询院校
+     * 查询全部ID列表
      */
-    public Page<College> findByLocationId(int[] id, Pageable pageable) {
-        return collegeDao.findByLocationId(id, pageable);
+    /**
+     * 查询全部ID列表
+     */
+    public Integer[] getAllId() {
+        List<Integer> list = collegeDao.getAllId();
+        Integer[] ids = new Integer[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            ids[i] = list.get(i);
+        }
+        return ids;
+    }
+
+    /**
+     * 首页的综合查询 大聚合！！！
+     *
+     * @param locationId   地区ID列表
+     * @param natureId     性质ID列表
+     * @param specialityId 特性ID列表
+     * @param typeId       类别ID列表
+     * @param pageable     分页查询
+     * @return 分页类
+     */
+    public Page<College> index(Integer[] locationId,
+                               Integer[] natureId,
+                               Integer[] specialityId,
+                               Integer[] typeId,
+                               Pageable pageable) {
+        return collegeDao.index(locationId, natureId, specialityId, typeId, pageable);
     }
 
 }

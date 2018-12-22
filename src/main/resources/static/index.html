@@ -31,21 +31,21 @@
         <div class="col-sm-3">
             <div class="menu">
                 <p>
-                    <span class="label label-default menu-label">地区</span>
-                </p>
-                <location_list v-for="location in location_data"
-                               v-bind:location="location"
-                               v-bind:key="location.id">
-                </location_list>
-            </div>
-            <div class="menu">
-                <p>
                     <span class="label label-default menu-label">院校特性</span>
                 </p>
                 <speciality_list v-for="speciality in speciality_data"
                                  v-bind:speciality="speciality"
                                  v-bind:key="speciality.id">
                 </speciality_list>
+            </div>
+            <div class="menu">
+                <p>
+                    <span class="label label-default menu-label">院校类别</span>
+                </p>
+                <type_list v-for="type in type_data"
+                           v-bind:type="type"
+                           v-bind:key="type.id">
+                </type_list>
             </div>
             <div class="menu">
                 <p>
@@ -58,14 +58,14 @@
             </div>
             <div class="menu">
                 <p>
-                    <span class="label label-default menu-label">院校隶属</span>
+                    <span class="label label-default menu-label">地区</span>
                 </p>
-                <button class="btn btn-uncheck">教育部</button>
-                <button class="btn btn-uncheck">其他部委</button>
-                <button class="btn btn-uncheck">地方</button>
+                <location_list v-for="location in location_data"
+                               v-bind:location="location"
+                               v-bind:key="location.id">
+                </location_list>
             </div>
         </div>
-
         <div class="col-sm-9 left-line">
             <div class="table-responsive">
                 <table class="table">
@@ -189,8 +189,8 @@
     }, 100)
 }();
 </script>
-<script src="js/vue.js"></script>
-<!--<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>-->
+<!--<script src="js/vue.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="js/base.js"></script>

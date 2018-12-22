@@ -19,7 +19,8 @@ public class College {
     private String cPartition; // 所处分区
     @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Nature.class, optional = false)
     private Nature cNature; // 性质
-    private String cType; // 类型
+    @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Type.class, optional = false)
+    private Type cType; // 类型
     private Integer ranking; // 排名
     private Integer areaCompetitiveRanking; // 地区竞争力排行
     private Integer collegesCompetitiveRanking; // 院校竞争力排行
@@ -73,11 +74,11 @@ public class College {
         this.cNature = cNature;
     }
 
-    public String getcType() {
+    public Type getcType() {
         return cType;
     }
 
-    public void setcType(String cType) {
+    public void setcType(Type cType) {
         this.cType = cType;
     }
 

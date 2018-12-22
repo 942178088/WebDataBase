@@ -9,8 +9,12 @@ var main = new Vue({
         speciality_data: [],
         nature_data: [],
         college_data: [],
-        select_location_data: {
-            id: [],
+        type_data: [],
+        select_data: {
+            speciality_id: [],
+            type_id: [],
+            nature_id: [],
+            location_id: [],
         },
         columns: [
             {name: '校名'},
@@ -22,7 +26,7 @@ var main = new Vue({
             {name: '所在地'},
         ],
         colleges_null: [{
-            "id": '#',
+            "location_id": '#',
             "name": "空",
             "cCode": "空",
             "cNature": "空",
@@ -54,6 +58,13 @@ var main = new Vue({
                 '{{nature.name}}\n' +
                 '</button>',
         },
+        'type_list': {
+            props: ['type'],
+            template:
+                '<button :id="type.id" class="btn btn-uncheck" onclick="selectType(this.id)">\n    ' +
+                '{{type.name}}\n' +
+                '</button>',
+        },
         'college_list': {
             props: ['college'],
             template:
@@ -80,35 +91,32 @@ var main = new Vue({
             type: 'GET',
             success: function (data) {
                 main.speciality_data = data.specialities;
-                loadCollege();
             }
         });
-        // 加载性质列表 综合 理工
+        // 加载性质列表 高等院校 科研机构
         $.ajax({
             url: 'nature/list',
             type: 'GET',
             success: function (data) {
                 main.nature_data = data.natures;
+            }
+        });
+        // 加载类别列表 综合 理工
+        $.ajax({
+            url: 'type/list',
+            type: 'GET',
+            success: function (data) {
+                main.type_data = data.types;
                 loadCollege();
             }
         });
     },
 });
 
-// 选中性质
-function selectNature(id) {
-
-}
-
-// 选中特性
-function selectSpeciality(id) {
-
-}
-
-// 选中地区
-function selectLocation(id) {
+// 选中类别
+function selectType(id) {
     id = parseInt(id);
-    var ids = main.select_location_data.id;
+    var ids = main.select_data.type_id;
     var i = 0;
     for (; i < ids.length; i++) {
         if (ids[i] == id)
@@ -119,7 +127,64 @@ function selectLocation(id) {
     } else {
         if (i > -1) ids.splice(i, 1);
     }
-    main.select_location_data.id = ids;
+    main.select_data.type_id = ids;
+    main.page = 1;
+    loadCollege();
+}
+
+// 选中性质
+function selectNature(id) {
+    id = parseInt(id);
+    var ids = main.select_data.nature_id;
+    var i = 0;
+    for (; i < ids.length; i++) {
+        if (ids[i] == id)
+            break;
+    }
+    if (i == ids.length) {
+        ids.push(id);
+    } else {
+        if (i > -1) ids.splice(i, 1);
+    }
+    main.select_data.nature_id = ids;
+    main.page = 1;
+    loadCollege();
+}
+
+// 选中特性
+function selectSpeciality(id) {
+    id = parseInt(id);
+    var ids = main.select_data.speciality_id;
+    var i = 0;
+    for (; i < ids.length; i++) {
+        if (ids[i] == id)
+            break;
+    }
+    if (i == ids.length) {
+        ids.push(id);
+    } else {
+        if (i > -1) ids.splice(i, 1);
+    }
+    main.select_data.speciality_id = ids;
+    main.page = 1;
+    loadCollege();
+}
+
+// 选中地区
+function selectLocation(id) {
+    id = parseInt(id);
+    var ids = main.select_data.location_id;
+    var i = 0;
+    for (; i < ids.length; i++) {
+        if (ids[i] == id)
+            break;
+    }
+    if (i == ids.length) {
+        ids.push(id);
+    } else {
+        if (i > -1) ids.splice(i, 1);
+    }
+    main.select_data.location_id = ids;
     main.page = 1;
     loadCollege();
 }
@@ -128,15 +193,18 @@ function selectLocation(id) {
 function loadCollege() {
     location.replace('#');
     var url = '';
-    if (main.select_location_data.id.length == 0) {
+    if (main.select_data.location_id.length == 0 &&
+        main.select_data.type_id.length == 0 &&
+        main.select_data.speciality_id == 0 &&
+        main.select_data.nature_id == 0) {
         url = 'college/list?page=' + main.page + '&size=' + main.size;
     } else {
-        url = 'college/byLocation?page=' + main.page + '&size=' + main.size;
+        url = 'college/index?page=' + main.page + '&size=' + main.size;
     }
     $.ajax({
         url: url,
         type: 'POST',
-        data: JSON.stringify(main.select_location_data),
+        data: JSON.stringify(main.select_data),
         dataType: 'json',
         contentType: "application/json",
         traditional: true,

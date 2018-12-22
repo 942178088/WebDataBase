@@ -1,13 +1,7 @@
 package cn.edu.zcmu.WebDataBase;
 
-import cn.edu.zcmu.WebDataBase.dao.CollegeDao;
-import cn.edu.zcmu.WebDataBase.dao.LocationDao;
-import cn.edu.zcmu.WebDataBase.dao.NatureDao;
-import cn.edu.zcmu.WebDataBase.dao.SpecialityDao;
-import cn.edu.zcmu.WebDataBase.entity.College;
-import cn.edu.zcmu.WebDataBase.entity.Location;
-import cn.edu.zcmu.WebDataBase.entity.Nature;
-import cn.edu.zcmu.WebDataBase.entity.Speciality;
+import cn.edu.zcmu.WebDataBase.dao.*;
+import cn.edu.zcmu.WebDataBase.entity.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,17 +26,25 @@ public class WebDataBaseApplicationTests {
     SpecialityDao specialityDao;
     @Resource
     NatureDao natureDao;
+    @Resource
+    TypeDao typeDao;
 
+    @Test
+    public void checkNull() {
+        List<Integer> list = locationDao.getAllId();
+    }
 
     /**
      * 添加测试数据
      */
     @Test
-    public void contextLoads() {
+    public void addTestData() {
         String line;
+        String line_detail;
         try {
             BufferedReader in = new BufferedReader(new FileReader("src/test/yuanxiao.txt"));
-            while ((line = in.readLine()) != null) {
+            BufferedReader in_detail = new BufferedReader(new FileReader("src/test/yuanxiao_detail.txt"));
+            while ((line = in.readLine()) != null && ((line_detail = in_detail.readLine()) != null)) {
                 String[] col = line.split(",");
                 if (col[0].equals("院校名称"))
                     continue;
@@ -60,17 +62,17 @@ public class WebDataBaseApplicationTests {
                     } else {
                         college.setLocation(location);
                     }
-                    // 保存性质
-                    String natureStr = col[2].trim();
-                    Nature nature = natureDao.findByName(natureStr);
-                    if (nature == null) {
-                        Nature n = new Nature();
-                        n.setName(natureStr);
-                        natureDao.save(n);
-                        n = natureDao.findByName(natureStr);
-                        college.setcNature(n);
+                    // 保存类别
+                    String typeStr = col[2].trim();
+                    Type type = typeDao.findByName(typeStr);
+                    if (type == null) {
+                        Type t = new Type();
+                        t.setName(typeStr);
+                        typeDao.save(t);
+                        t = typeDao.findByName(typeStr);
+                        college.setcType(t);
                     } else {
-                        college.setcNature(nature);
+                        college.setcType(type);
                     }
                     // 保存特性
                     int firstIndex = line.indexOf("\"");
@@ -106,7 +108,6 @@ public class WebDataBaseApplicationTests {
                         }
                     }
                     college.setSpecialities(specialities);
-                    System.out.println(specialityStr);
                     // 保存建立时间
                     String time = line.substring(line.length() - 5);
                     String year = time.substring(time.length() - 1);
@@ -123,45 +124,37 @@ public class WebDataBaseApplicationTests {
                         college.setFoundingYear(null);
                     }
                     college.setBadgeUrl("NULL");
+                    String[] col_detail = line_detail.split(",");
+                    college.setcCode(col_detail[1].trim());
+                    college.setcPartition(col_detail[3].trim());
+                    // 院校性质 高等院校 科研院所
+                    Nature nature = natureDao.findByName(col_detail[4].trim());
+                    if (nature == null) {
+                        Nature n = new Nature();
+                        n.setName(col_detail[4].trim());
+                        natureDao.save(n);
+                        n = natureDao.findByName(col_detail[4].trim());
+                        college.setcNature(n);
+                    } else {
+                        college.setcNature(nature);
+                    }
+                    if (!col_detail[6].trim().equals("未知"))
+                        college.setRanking(Integer.parseInt(col_detail[6].trim()));
+                    else
+                        college.setRanking(-1);
+                    if (!col_detail[7].trim().equals("未知"))
+                        college.setAreaCompetitiveRanking(Integer.parseInt(col_detail[7].trim()));
+                    else
+                        college.setRanking(-1);
+                    if (!col_detail[8].trim().equals("未知"))
+                        college.setCollegesCompetitiveRanking(Integer.parseInt(col_detail[8].trim()));
+                    else
+                        college.setRanking(-1);
+                    college.setPhoneNumber(col_detail[9].trim());
+                    college.setImgUrl(col_detail[10].trim());
+
                     collegeDao.save(college);
                 }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void contextLoads2() {
-        String line;
-        try {
-            BufferedReader in = new BufferedReader(new FileReader("src/test/yuanxiao_detail.txt"));
-            while ((line = in.readLine()) != null) {
-                String[] col = line.split(",");
-                if (col[0].trim().equals("院校名称0"))
-                    continue;
-                College college = collegeDao.findByName(col[0].trim());
-                college.setcCode(col[1].trim());
-                college.setcPartition(col[3].trim());
-                college.setcType(col[5].trim());
-                if (!col[6].trim().equals("未知"))
-                    college.setRanking(Integer.parseInt(col[6].trim()));
-                else
-                    college.setRanking(-1);
-                if (!col[7].trim().equals("未知"))
-                    college.setAreaCompetitiveRanking(Integer.parseInt(col[7].trim()));
-                else
-                    college.setRanking(-1);
-                if (!col[8].trim().equals("未知"))
-                    college.setCollegesCompetitiveRanking(Integer.parseInt(col[8].trim()));
-                else
-                    college.setRanking(-1);
-                college.setPhoneNumber(col[9].trim());
-                college.setImgUrl(col[10].trim());
-                System.out.println(college.toString());
-                collegeDao.save(college);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

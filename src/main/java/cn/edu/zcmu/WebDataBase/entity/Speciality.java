@@ -7,7 +7,7 @@ import javax.persistence.*;
  * 院校特性（985高校，211高校，研究生院，自划线院校）
  */
 @Entity
-@Table(name = "SPECIALITY")
+@Table(name = "SPECIALITIES")
 public class Speciality {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

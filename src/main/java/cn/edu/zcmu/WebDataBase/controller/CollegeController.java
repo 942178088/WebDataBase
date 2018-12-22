@@ -1,8 +1,7 @@
 package cn.edu.zcmu.WebDataBase.controller;
 
 import cn.edu.zcmu.WebDataBase.entity.College;
-import cn.edu.zcmu.WebDataBase.service.BaseService;
-import cn.edu.zcmu.WebDataBase.service.CollegeService;
+import cn.edu.zcmu.WebDataBase.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -28,6 +27,15 @@ public class CollegeController extends BaseController {
     private ObjectMapper mapper;
     private ObjectNode json;
 
+    @Resource
+    private LocationService locationService;
+    @Resource
+    private NatureService natureService;
+    @Resource
+    private SpecialityService specialityService;
+    @Resource
+    private TypeService typeService;
+
     @Autowired
     public CollegeController(ObjectMapper mapper) {
         this.mapper = mapper;
@@ -48,7 +56,7 @@ public class CollegeController extends BaseController {
             collegeJson.put("name", college.getName());
             collegeJson.put("cCode", college.getcCode());
             collegeJson.put("cNature", college.getcNature().getName());
-            collegeJson.put("cType", college.getcType());
+            collegeJson.put("cType", college.getcType().getName());
             collegeJson.put("ranking", college.getRanking());
             if (college.getFoundingYear() != null) {
                 collegeJson.put("foundingYear", college.getFoundingYear().toString());
@@ -67,28 +75,78 @@ public class CollegeController extends BaseController {
      * 根据地区获取院校列表
      */
     @ResponseBody
-    @RequestMapping(value = "/byLocation")
+    @RequestMapping(value = "/index")
     public ObjectNode findByLocationId(Integer page, Integer size, HttpServletRequest request) {
         Page<College> colleges = null;
         json = mapper.createObjectNode();
+        Integer[] locationId;
+        Integer[] natureId;
+        Integer[] specialityId;
+        Integer[] typeId;
         // 从request中获取json串
         String jsonStr = BaseService.getJson(request);
         try {
             // 转换成json对象
-            JSONObject jsonId = new JSONObject(jsonStr);
-            jsonStr = jsonId.getString("id");
+            JSONObject jsonIds = new JSONObject(jsonStr);
+            String locationIdStr = jsonIds.getString("location_id");
+            String natureIdStr = jsonIds.getString("nature_id");
+            String specialityIdStr = jsonIds.getString("speciality_id");
+            String typeIdStr = jsonIds.getString("type_id");
             // 分离数组左右的 []
-            jsonStr = jsonStr.substring(1, jsonStr.length() - 1);
-            // 分离id
-            String[] ids = jsonStr.split(",");
-            // 组装id数组
-            int[] id = new int[ids.length];
-            for (int i = 0; i < id.length; i++) {
-                if (ids[i].trim().equals(""))
-                    continue;
-                id[i] = Integer.parseInt(ids[i].trim());
+            locationIdStr = locationIdStr.substring(1, locationIdStr.length() - 1);
+            if (locationIdStr.equals("")) {
+                locationId = locationService.getAllId();
+            } else {
+                // 分离id
+                String[] locationIds = locationIdStr.split(",");
+                // 组装id数组
+                locationId = new Integer[locationIds.length];
+                for (int i = 0; i < locationId.length; i++) {
+                    if (locationIds[i].trim().equals(""))
+                        continue;
+                    locationId[i] = Integer.parseInt(locationIds[i].trim());
+                }
             }
-            colleges = collegeService.findByLocationId(id, BaseService.buildPageable(page, size, BaseService.buildSort("id", "ASC")));
+            natureIdStr = natureIdStr.substring(1, natureIdStr.length() - 1);
+            if (natureIdStr.equals("")) {
+                natureId = natureService.getAllId();
+            } else {
+                // 分离id
+                String[] natureIds = natureIdStr.split(",");
+                // 组装id数组
+                natureId = new Integer[natureIds.length];
+                for (int i = 0; i < natureId.length; i++) {
+                    if (natureIds[i].trim().equals(""))
+                        continue;
+                    natureId[i] = Integer.parseInt(natureIds[i].trim());
+                }
+            }
+            specialityIdStr = specialityIdStr.substring(1, specialityIdStr.length() - 1);
+            if (specialityIdStr.equals("")) {
+                specialityId = specialityService.getAllId();
+            } else {
+                String[] specialityIds = specialityIdStr.split(",");
+                specialityId = new Integer[specialityIds.length];
+                for (int i = 0; i < specialityId.length; i++) {
+                    if (specialityIds[i].trim().equals(""))
+                        continue;
+                    specialityId[i] = Integer.parseInt(specialityIds[i].trim());
+                }
+            }
+            typeIdStr = typeIdStr.substring(1, typeIdStr.length() - 1);
+            if (typeIdStr.equals("")) {
+                typeId = typeService.getAllId();
+            } else {
+                String[] typeIds = typeIdStr.split(",");
+                typeId = new Integer[typeIds.length];
+                for (int i = 0; i < typeId.length; i++) {
+                    if (typeIds[i].trim().equals(""))
+                        continue;
+                    typeId[i] = Integer.parseInt(typeIds[i].trim());
+                }
+            }
+            colleges = collegeService.index(locationId, natureId, specialityId, typeId,
+                    BaseService.buildPageable(page, size, BaseService.buildSort("id", "ASC")));
         } catch (JSONException e) {
             json.put(STATUS_NAME, STATUS_CODE_EXCEPTION);
             json.put("e_msg", e.getMessage());
@@ -100,7 +158,7 @@ public class CollegeController extends BaseController {
             collegeJson.put("name", college.getName());
             collegeJson.put("cCode", college.getcCode());
             collegeJson.put("cNature", college.getcNature().getName());
-            collegeJson.put("cType", college.getcType());
+            collegeJson.put("cType", college.getcType().getName());
             collegeJson.put("ranking", college.getRanking());
             if (college.getFoundingYear() != null) {
                 collegeJson.put("foundingYear", college.getFoundingYear().toString());

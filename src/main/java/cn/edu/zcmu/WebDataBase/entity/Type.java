@@ -3,12 +3,12 @@ package cn.edu.zcmu.WebDataBase.entity;
 import javax.persistence.*;
 
 /**
- * 院校性质
- * 高等院校 科研院所
+ * 院校类型
+ * 综合类，理工类.....
  */
 @Entity
-@Table(name = "NATURES")
-public class Nature {
+@Table(name = "TYPES")
+public class Type {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

@@ -1,7 +1,7 @@
 package cn.edu.zcmu.WebDataBase.service;
 
-import cn.edu.zcmu.WebDataBase.dao.SpecialityDao;
-import cn.edu.zcmu.WebDataBase.entity.Speciality;
+import cn.edu.zcmu.WebDataBase.dao.TypeDao;
+import cn.edu.zcmu.WebDataBase.entity.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
@@ -9,29 +9,28 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 院校特性 服务层
- * 院校特性（985高校，211高校，研究生院，自划线院校）
+ * 院校种类 服务层
+ * 综合类，理工类.....
  */
 @Service
-public class SpecialityService extends BaseService<Speciality, Integer> {
+public class TypeService extends BaseService<Type, Integer> {
     @Autowired
-    private SpecialityDao specialityDao;
+    private TypeDao typeDao;
 
     @Override
-    public PagingAndSortingRepository<Speciality, Integer> getDao() {
-        return specialityDao;
+    public PagingAndSortingRepository<Type, Integer> getDao() {
+        return typeDao;
     }
 
     /**
      * 查询全部ID列表
      */
     public Integer[] getAllId() {
-        List<Integer> list = specialityDao.getAllId();
+        List<Integer> list = typeDao.getAllId();
         Integer[] ids = new Integer[list.size()];
         for (int i = 0; i < list.size(); i++) {
             ids[i] = list.get(i);
         }
         return ids;
     }
-
 }
