@@ -12,7 +12,7 @@ public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(unique = true, nullable = false, length = 30)
+    @Column(nullable = false, length = 30)
     private String name; // 名称
     @Column(unique = true, nullable = false, length = 30)
     private String sCode; // 代码

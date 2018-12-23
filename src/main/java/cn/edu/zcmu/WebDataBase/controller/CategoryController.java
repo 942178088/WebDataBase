@@ -36,6 +36,7 @@ public class CategoryController extends BaseController {
     @GetMapping("/test")
     public String test() {
         categoryService.addTestData();
+        categoryService.addTestPro();
         return "test";
     }
 

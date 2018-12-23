@@ -37,6 +37,53 @@ public class CategoryService extends BaseService<Category, Integer> {
     NatureDao natureDao;
     @Resource
     TypeDao typeDao;
+    @Resource
+    InstituteDao instituteDao;
+    @Resource
+    SubjectDao subjectDao;
+
+    public void addTestPro() {
+        String line;
+        try {
+            BufferedReader in = new BufferedReader(new FileReader("src/yuanxiao_cate.txt"));
+            while ((line = in.readLine()) != null) {
+                String[] col = line.split(",");
+                Category category = categoryDao.findByName(col[1]);
+                if (category == null) {
+                    category = new Category();
+                    category.setName(col[1]);
+                    category.setcCode(col[0]);
+                    categoryDao.save(category);
+                    category = categoryDao.findByName(col[1]);
+                }
+                Subject father_subject = subjectDao.findByFatherName(col[3]);
+                if (father_subject == null) {
+                    father_subject = new Subject();
+                    father_subject.setName(col[3]);
+                    father_subject.setCategory(category);
+                    father_subject.setsCode(col[2]);
+                    subjectDao.save(father_subject);
+                }
+                try {
+                    if (col[5] != null) {
+                        Subject child_subject = subjectDao.findByChildName(col[5]);
+                        if (child_subject == null) {
+                            child_subject = new Subject();
+                            child_subject.setName(col[5]);
+                            child_subject.setsCode(col[4]);
+                            child_subject.setFather_subject(father_subject);
+                            child_subject.setCategory(category);
+                            subjectDao.save(child_subject);
+                        }
+                    }
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void addTestData() {
         String line;

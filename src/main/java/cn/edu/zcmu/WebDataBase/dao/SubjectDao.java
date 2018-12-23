@@ -23,4 +23,9 @@ public interface SubjectDao extends PagingAndSortingRepository<Subject, Integer>
     @Query(value = "SELECT * FROM subjects WHERE father_subject_id = ?1", nativeQuery = true)
     List<Subject> findAllChild(Integer id);
 
+    @Query(value = "SELECT * FROM subjects WHERE name = ? AND father_subject_id IS NULL", nativeQuery = true)
+    Subject findByFatherName(String name);
+
+    @Query(value = "SELECT * FROM subjects WHERE name = ? AND father_subject_id IS NOT NULL", nativeQuery = true)
+    Subject findByChildName(String name);
 }
