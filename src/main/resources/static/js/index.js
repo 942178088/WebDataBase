@@ -65,16 +65,6 @@ var main = new Vue({
                 '{{type.name}}\n' +
                 '</button>',
         },
-        'college_list': {
-            props: ['college'],
-            template:
-                '<tr>\n    <td>\n        <img src="img/zcmu_logo.jpg" width="20' +
-                'px" height="20px">' +
-                '\n    </td>\n    <td>{{college.name}}</td>\n    ' +
-                '<td>{{college.cCode}}</td>\n    <td>{{college.cNature}}</td>\n    <td>{{college.cType}}</td>\n    ' +
-                '<td>{{college.ranking}}</td>\n    <td>{{college.foundingYear}}</td>\n' +
-                '    <td>{{college.location}}</td>\n</tr>',
-        },
     },
     created: function () {
         // 加载地区列表
@@ -294,3 +284,7 @@ $("input").keydown(function (e) {//当按下按键时
         loadCollege();
     }
 });
+
+$("#more_menu").click(function () {
+    $("#location_menu").toggle();
+})

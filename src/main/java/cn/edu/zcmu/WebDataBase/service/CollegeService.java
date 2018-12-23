@@ -2,6 +2,7 @@ package cn.edu.zcmu.WebDataBase.service;
 
 import cn.edu.zcmu.WebDataBase.dao.CollegeDao;
 import cn.edu.zcmu.WebDataBase.entity.College;
+import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,11 +25,22 @@ public class CollegeService extends BaseService<College, Integer> {
     }
 
     /**
+     * 根据院校代码查询
+     */
+    public College findByCode(String code) {
+        if (checkNullStr(code)) {
+            return null;
+        } else {
+            return collegeDao.findByCode(code);
+        }
+    }
+
+    /**
      * 根据名称或代码搜索
      */
     public Page<College> findAllByNameAndCode(String keyword,
                                               Pageable pageable) {
-        return collegeDao.findByNameOrCode(keyword,pageable);
+        return collegeDao.findByNameOrCode(keyword, pageable);
     }
 
     /**

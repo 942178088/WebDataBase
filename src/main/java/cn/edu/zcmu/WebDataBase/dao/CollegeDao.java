@@ -14,6 +14,12 @@ import java.util.List;
 public interface CollegeDao extends PagingAndSortingRepository<College, Integer> {
 
     /**
+     * 根据院校代码查询
+     */
+    @Query(value = "SELECT * FROM colleges c WHERE c.c_code = ?1", nativeQuery = true)
+    College findByCode(String code);
+
+    /**
      * 查询全部ID列表
      */
     @Query(value = "SELECT c.id FROM colleges c;", nativeQuery = true)

@@ -10,11 +10,14 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * 院校 控制层
@@ -39,6 +42,20 @@ public class CollegeController extends BaseController {
     @Autowired
     public CollegeController(ObjectMapper mapper) {
         this.mapper = mapper;
+    }
+
+    @GetMapping(value = "/{idOrCode}")
+    public String one(@PathVariable("idOrCode") String idOrCode, Map<String, Object> map) {
+        College college;
+        try {
+            Integer id = Integer.parseInt(idOrCode.trim());
+            college = collegeService.findById(id);
+            map.put("college", college);
+        } catch (Exception e) {
+            college = collegeService.findByCode(idOrCode);
+            map.put("college", college);
+        }
+        return "college";
     }
 
     /**

@@ -152,7 +152,6 @@ public class WebDataBaseApplicationTests {
                         college.setRanking(-1);
                     college.setPhoneNumber(col_detail[9].trim());
                     college.setImgUrl(col_detail[10].trim());
-
                     collegeDao.save(college);
                 }
             }

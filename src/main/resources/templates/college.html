@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.springframework.org/schema/data/jaxb">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>院校详情页 - 考研数据库</title>
+
+    <link th:href="@{~/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{~/css/base.css}" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div id="main" class="container">
+    <div class="row">
+
+        <div class="col-sm-12 text-center logo">
+            <img th:src="@{~/img/logo.png}" class="img-responsive" alt="Responsive image">
+        </div>
+
+        <div class="col-sm-12">
+            <ol class="breadcrumb">
+                <li>
+                    <a th:href="@{~/index.html}">
+                        主页
+                    </a>
+                </li>
+                <li th:text="${college.name}" class="active"></li>
+            </ol>
+            <div class="col-sm-8">
+                <input id="college_id" hidden th:value="${college.id}">
+                <h3>
+                    <span th:text="${college.name}"></span>
+                    <span th:each="speciality,stat:${college.specialities}">
+                    <span class="badge" th:text="${speciality?.name}"></span>
+                </span>
+                </h3>
+                <h4 th:text="'代码:'+${college.cCode}+' 分区:'+${college.cPartition}"></h4>
+                <p th:text="${college.cNature.name}+' '+${college.cType.name}"></p>
+                <p th:if="${college.ranking!=null&&college.ranking>0}"
+                   th:text="'排名:'+${college.ranking}"></p>
+                <p th:if="${college.areaCompetitiveRanking!=null&&college.areaCompetitiveRanking>0}"
+                   th:text="'地区竞争力排行:'+${college.areaCompetitiveRanking}"></p>
+                <p th:if="${college.collegesCompetitiveRanking!=null&&college.collegesCompetitiveRanking>0}"
+                   th:text="'院校竞争力排行:'+${college.collegesCompetitiveRanking}"></p>
+                <div v-if="institute_data.length > 0">
+                    <p>学院列表:</p>
+                    <institute_components v-for="institute in institute_data"
+                                          v-bind:institute="institute"
+                                          v-bind:key="institute.id">
+                    </institute_components>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="logo">
+                    <img th:src="${college.imgUrl}" class="img-responsive" alt="Responsive image">
+                </div>
+                <p th:text="'所在地:'+${college.location.name}"></p>
+                <p th:text="'联系方式:'+${college.phoneNumber}"></p>
+                <p th:if="${college.cDescription != null}" th:text="'简介:'+${college?.cDescription}"></p>
+            </div>
+            <div class="col-sm-12 mt-10">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#instituteModal">
+                    添加学院
+                </button>
+                <div id="instituteModal" class="modal fade"
+                     tabindex="-1" role="dialog" aria-labelledby="instituteModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="instituteModalLabel">添加学院</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form id="instituteModalForm">
+                                    <div class="form-group">
+                                        <label>学院名称</label>
+                                        <input name="name" type="text" class="form-control">
+                                    </div>
+                                    <input name="college.id" hidden th:value="${college.id}">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button id="instituteModalFormSubmit" type="button" class="btn btn-primary">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#categoryModal">
+                    添加门类
+                </button>
+                <div id="categoryModal" class="modal fade"
+                     tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="categoryModalLabel">添加门类</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form id="categoryModalForm">
+                                    <div class="form-group">
+                                        <label>门类名称</label>
+                                        <input name="name" type="text" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>门类代码</label>
+                                        <input name="cCode" type="text" class="form-control">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button id="categoryModalFormSubmit" type="button" class="btn btn-primary">
+                                    保存
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#subjectModal">
+                    添加学科
+                </button>
+                <div id="subjectModal" class="modal fade"
+                     tabindex="-1" role="dialog" aria-labelledby="subjectModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="subjectModalLabel">添加学科</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form id="subjectModalForm">
+                                    <div class="form-group">
+                                        <label>学科名称</label>
+                                        <input name="name" type="text" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>学科代码</label>
+                                        <input name="sCode" type="text" class="form-control">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button id="subjectModalFormSubmit" type="button" class="btn btn-primary">
+                                    保存
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#kindModal">
+                    添加种类
+                </button>
+                <div id="kindModal" class="modal fade"
+                     tabindex="-1" role="dialog" aria-labelledby="kindModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="kindModalLabel">添加种类</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form id="kindModalForm">
+                                    <div class="form-group">
+                                        <label>种类名称</label>
+                                        <input name="name" type="text" class="form-control">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button id="kindModalFormSubmit" type="button" class="btn btn-primary">
+                                    保存
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#professionalModal">
+                    添加专业
+                </button>
+                <div id="professionalModal" class="modal fade"
+                     tabindex="-1" role="dialog" aria-labelledby="instituteModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="professionalModalLabel">添加专业</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form id="professionalModalForm">
+                                    <label>学院</label>
+                                    <select name="institute.id" class="form-control">
+                                        <option v-for="institute in institute_data"
+                                                :value="institute.id">
+                                            {{institute.name}}
+                                        </option>
+                                    </select>
+                                    <label>种类</label>
+                                    <select name="kind.id" class="form-control">
+                                        <option v-for="kind in kind_data"
+                                                :value="kind.id">
+                                            {{kind.name}}
+                                        </option>
+                                    </select>
+                                    <label>门类</label>
+                                    <select name="category.id" class="form-control">
+                                        <option v-for="category in category_data"
+                                                :value="category.id">
+                                            {{category.name}}[{{category.code}}]
+                                        </option>
+                                    </select>
+                                    <label>学科</label>
+                                    <select name="subject.id" class="form-control">
+                                        <option v-for="subject in subject_data"
+                                                :value="subject.id">
+                                            {{subject.name}}[{{subject.code}}]
+                                        </option>
+                                    </select>
+                                    <div class="form-group">
+                                        <label>专业名称</label>
+                                        <input name="name" type="text" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>专业代码</label>
+                                        <input name="pCode" type="text" class="form-control">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button id="professionalModalFormSubmit" type="button" class="btn btn-primary">
+                                    保存
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer class="footer">
+    <p>陈健&nbsp;孟凡锦&nbsp;王浩银&nbsp;汪恒</p>
+    <p>所有数据均来自网络搜集，仅供参考</p>
+</footer>
+
+<script type="text/javascript" th:src="@{~/js/canvas-nest.min.js}">
+    !function () {
+        function n(n, e, t) {
+            return n.getAttribute(e) || t
+        }
+
+        function e(n) {
+            return document.getElementsByTagName(n)
+        }
+
+        function t() {
+            var t = e("script"), o = t.length, i = t[o - 1];
+            return {
+                l: o,
+                z: n(i, "zIndex", -1),
+                o: n(i, "opacity", .5),
+                c: n(i, "color", "0,0,0"),
+                n: n(i, "count", 99)
+            }
+        }
+
+        function o() {
+            a = m.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth, c = m.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+        }
+
+        function i() {
+            r.clearRect(0, 0, a, c);
+            var n, e, t, o, m, l;
+            s.forEach(function (i, x) {
+                for (i.x += i.xa, i.y += i.ya, i.xa *= i.x > a || i.x < 0 ? -1 : 1, i.ya *= i.y > c || i.y < 0 ? -1 : 1, r.fillRect(i.x - .5, i.y - .5, 1, 1), e = x + 1; e < u.length; e++) n = u[e], null !== n.x && null !== n.y && (o = i.x - n.x, m = i.y - n.y, l = o * o + m * m, l < n.max && (n === y && l >= n.max / 2 && (i.x -= .03 * o, i.y -= .03 * m), t = (n.max - l) / n.max, r.beginPath(), r.lineWidth = t / 2, r.strokeStyle = "rgba(" + d.c + "," + (t + .2) + ")", r.moveTo(i.x, i.y), r.lineTo(n.x, n.y), r.stroke()))
+            }), x(i)
+        }
+
+        var a, c, u, m = document.createElement("canvas"), d = t(), l = "c_n" + d.l, r = m.getContext("2d"),
+            x = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (n) {
+                window.setTimeout(n, 1e3 / 45)
+            }, w = Math.random, y = {x: null, y: null, max: 2e4};
+        m.id = l, m.style.cssText = "position:fixed;top:0;left:0;z-index:" + d.z + ";opacity:" + d.o, e("body")[0].appendChild(m), o(), window.onresize = o, window.onmousemove = function (n) {
+            n = n || window.event, y.x = n.clientX, y.y = n.clientY
+        }, window.onmouseout = function () {
+            y.x = null, y.y = null
+        };
+        for (var s = [], f = 0; d.n > f; f++) {
+            var h = w() * a, g = w() * c, v = 2 * w() - 1, p = 2 * w() - 1;
+            s.push({x: h, y: g, xa: v, ya: p, max: 6e3})
+        }
+        u = s.concat([y]), setTimeout(function () {
+            i()
+        }, 100)
+    }();
+</script>
+<!--<script th:src="@{~/js/vue.js}"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+<script th:src="@{~/js/jquery.min.js}"></script>
+<script th:src="@{~/js/bootstrap.min.js}"></script>
+<script th:src="@{~/js/base.js}"></script>
+<script th:src="@{~/js/college.js}"></script>
+</body>
+</html>

@@ -45,6 +45,48 @@ jQuery(document).ready(function($) {
     });
 });
 
+//  状态码转换成语句
+function statusCodeToAlert(status) {
+    switch (status) {
+        case 0:
+            return "操作成功";
+            break;
+        case 1:
+            return "操作失败";
+            break;
+        case 2:
+            return "异常错误";
+            break;
+        case 3:
+            return "未登录";
+            break;
+        case 4:
+            return "超出限制";
+            break;
+        case 5:
+            return "参数不合法";
+            break;
+        case 6:
+            return "无权限";
+            break;
+        case 7:
+            return "重复操作";
+            break;
+    }
+}
+
+// 状态码转换成true或false
+function statusCodeToBool(status) {
+    switch (status) {
+        case 0:
+            return true;
+            break;
+        default:
+            return false;
+    }
+}
+
+
 // 检测字符串是否为空
 function checkNullStr(str) {
     if (str == null) return true;

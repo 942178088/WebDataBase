@@ -67,14 +67,30 @@
                 </nature_list>
             </div>
             <div class="menu">
-                <p>
-                    <span class="label label-default menu-label">地区</span>
-                </p>
-                <location_list v-for="location in location_data"
-                               v-bind:location="location"
-                               v-bind:key="location.id">
-                </location_list>
+                <a id="more_menu" href="javascript:void(0)">
+                    <span class="label label-success menu-label">更多选项</span>
+                </a>
             </div>
+            <div id="location_menu" hidden>
+                <div class="menu">
+                    <p>
+                        <span class="label label-default menu-label">操作</span>
+                    </p>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">
+                        添加院校
+                    </button>
+                </div>
+                <div class="menu">
+                    <p>
+                        <span class="label label-default menu-label">地区</span>
+                    </p>
+                    <location_list v-for="location in location_data"
+                                   v-bind:location="location"
+                                   v-bind:key="location.id">
+                    </location_list>
+                </div>
+            </div>
+
         </div>
         <div class="col-sm-9 left-line">
             <div class="table-responsive">
@@ -86,7 +102,11 @@
                     </thead>
                     <tbody>
                     <tr v-for="college in college_data">
-                        <td>{{college.name}}</td>
+                        <td>
+                            <a :href="'../college/' + college.id">
+                                {{college.name}}
+                            </a>
+                        </td>
                         <td>{{college.cCode}}</td>
                         <td>{{college.cNature}}</td>
                         <td>{{college.cType}}</td>
@@ -109,7 +129,6 @@
                                 <option value="1000">1000</option>
                             </select>
                         </td>
-
                     </tr>
                     </tfoot>
                 </table>

@@ -15,6 +15,7 @@ public class College {
     private Integer id;
     @Column(unique = true, nullable = false, length = 50)
     private String name; // 中文名称
+    @Column(unique = true)
     private String cCode; // 代码
     private String cPartition; // 所处分区
     @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Nature.class, optional = false)
@@ -30,7 +31,7 @@ public class College {
     private String cDescription; // 介绍
     private Date foundingYear; // 创建时间
     @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Location.class, optional = false)
-    private Location location; // 所在地 多对一
+    private Location location; // 所在地
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Speciality.class)
     private List<Speciality> specialities; // 院校特性（985高校，211高校，研究生院，自划线院校）
 
