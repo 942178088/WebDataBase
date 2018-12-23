@@ -179,6 +179,12 @@ function selectLocation(id) {
     loadCollege();
 }
 
+// 搜索
+function searchGo() {
+    main.page = 1;
+    loadCollege();
+}
+
 // 加载院校
 function loadCollege() {
     var keyword = $("#search_keyword").val().trim();
@@ -252,6 +258,26 @@ function formate(college) {
     return college;
 }
 
+// 添加院校
+$("#addModalFormSubmit").click(function () {
+    $.ajax({
+        url: '../college/add',
+        type: 'POST',
+        data: $("#addModalForm").serialize(),
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                loadCollege();
+                $("#addModal").modal('hide');
+            }
+            alert(statusCodeToAlert(status));
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
 $("#page_size_select").change(function () {
     main.size = $("#page_size_select").val();
     main.page = 1;
@@ -287,4 +313,4 @@ $("input").keydown(function (e) {//当按下按键时
 
 $("#more_menu").click(function () {
     $("#location_menu").toggle();
-})
+});

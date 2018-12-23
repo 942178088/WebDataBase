@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * 门类实体类
+ * 门类 实体类
  */
 @Entity
 @Table(name = "CATEGORYS")

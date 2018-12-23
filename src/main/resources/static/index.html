@@ -33,7 +33,7 @@
                 <input id="search_keyword" type="text" class="form-control"
                        placeholder="搜索 院校名（例：浙江中医药大学）、代码（例：10344）、地区（例：杭州）">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit" onclick="loadCollege()">Go!</button>
+                    <button class="btn btn-default" type="submit" onclick="searchGo()">Go!</button>
                 </span>
             </div>
         </div>
@@ -76,9 +76,64 @@
                     <p>
                         <span class="label label-default menu-label">操作</span>
                     </p>
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
                         添加院校
                     </button>
+                    <div id="addModal" class="modal fade"
+                         tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="addModalLabel">添加院校</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="addModalForm">
+                                        <div class="form-group">
+                                            <label>院校名称</label>
+                                            <input name="name" type="text" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>院校代码</label>
+                                            <input name="cCode" type="text" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>地区</label>
+                                            <select name="location.id" class="form-control">
+                                                <option v-for="location in location_data"
+                                                        :value="location.id">
+                                                    {{location.name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <label>院校性质</label>
+                                        <select name="cNature.id" class="form-control">
+                                            <option v-for="nature in nature_data"
+                                                    :value="nature.id">
+                                                {{nature.name}}
+                                            </option>
+                                        </select>
+                                        <label>院校类型</label>
+                                        <select name="cType.id" class="form-control">
+                                            <option v-for="type in type_data"
+                                                    :value="type.id">
+                                                {{type.name}}
+                                            </option>
+                                        </select>
+                                        <label>院校简介</label>
+                                        <textarea name="cDescription" class="form-control"></textarea>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button id="addModalFormSubmit" type="button" class="btn btn-primary">
+                                        保存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="menu">
                     <p>

@@ -1,10 +1,10 @@
 package cn.edu.zcmu.WebDataBase.entity;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
- * 一级学科 [01]中国语言文学
+ * 一级学科 0101 哲学
+ * 二级学科 010101 马克思主义哲学
  */
 @Entity
 @Table(name = "SUBJECTS")
@@ -16,7 +16,10 @@ public class Subject {
     private String name; // 名称
     @Column(unique = true, nullable = false, length = 30)
     private String sCode; // 代码
-    private Date sTime; // 创建时间
+    @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Subject.class)
+    private Subject father_subject; // 若是二级学科则关联其对应的一级学科
+    @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Category.class, optional = false)
+    private Category category; // 所属门类
 
     public Integer getId() {
         return id;
@@ -42,11 +45,19 @@ public class Subject {
         this.sCode = sCode;
     }
 
-    public Date getsTime() {
-        return sTime;
+    public Subject getFather_subject() {
+        return father_subject;
     }
 
-    public void setsTime(Date sTime) {
-        this.sTime = sTime;
+    public void setFather_subject(Subject father_subject) {
+        this.father_subject = father_subject;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

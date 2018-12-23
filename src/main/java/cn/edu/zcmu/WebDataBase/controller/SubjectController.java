@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,13 +32,34 @@ public class SubjectController extends BaseController {
     }
 
     /**
-     * 门类列表
+     * 二级学科列表
      */
     @ResponseBody
-    @GetMapping("/list")
-    public ObjectNode list() {
+    @GetMapping("/child_list")
+    public ObjectNode child_list(Integer id) {
         json = mapper.createObjectNode();
-        List<Subject> subjects = (List<Subject>) subjectService.findAll();
+        List<Subject> subjects = subjectService.findAllChild(id);
+        ArrayNode arrayNode = mapper.createArrayNode();
+        for (Subject subject : subjects) {
+            ObjectNode objectNode = mapper.createObjectNode();
+            objectNode.put("id", subject.getId());
+            objectNode.put("name", subject.getName());
+            objectNode.put("code", subject.getsCode());
+            arrayNode.add(objectNode);
+        }
+        json.set("subjects", arrayNode);
+        json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+        return json;
+    }
+
+    /**
+     * 一级学科列表
+     */
+    @ResponseBody
+    @GetMapping("/father_list")
+    public ObjectNode list(Integer id) {
+        json = mapper.createObjectNode();
+        List<Subject> subjects = subjectService.findAllFather(id);
         ArrayNode arrayNode = mapper.createArrayNode();
         for (Subject subject : subjects) {
             ObjectNode objectNode = mapper.createObjectNode();
@@ -59,11 +79,17 @@ public class SubjectController extends BaseController {
     @ResponseBody
     @PostMapping("/add")
     public ObjectNode add(Subject subject) {
+        if (subject.getFather_subject().getId() == -1) {
+            subject.setFather_subject(null);
+        }
+        System.out.println(subject.getCategory().getId());
         json = mapper.createObjectNode();
-        subject.setsTime(new Date());
         try {
-            subjectService.save(subject);
-            json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+            if (subjectService.save(subject)) {
+                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+            } else {
+                json.put(STATUS_NAME, STATUS_CODE_FILED);
+            }
         } catch (Exception e) {
             json.put(STATUS_NAME, STATUS_CODE_EXCEPTION);
             json.put("msg", e.getMessage());

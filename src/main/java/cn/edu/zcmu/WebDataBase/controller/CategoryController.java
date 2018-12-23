@@ -32,6 +32,13 @@ public class CategoryController extends BaseController {
         this.mapper = mapper;
     }
 
+    @ResponseBody
+    @GetMapping("/test")
+    public String test() {
+        categoryService.addTestData();
+        return "test";
+    }
+
     /**
      * 门类列表
      */
@@ -62,8 +69,11 @@ public class CategoryController extends BaseController {
         json = mapper.createObjectNode();
         category.setcTime(new Date());
         try {
-            categoryService.save(category);
-            json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+            if (categoryService.save(category)) {
+                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+            } else {
+                json.put(STATUS_NAME, STATUS_CODE_FILED);
+            }
         } catch (Exception e) {
             json.put(STATUS_NAME, STATUS_CODE_EXCEPTION);
             json.put("msg", e.getMessage());

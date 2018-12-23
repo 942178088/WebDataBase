@@ -38,8 +38,11 @@ public class ProfessionalController extends BaseController {
         json = mapper.createObjectNode();
         professional.setpTime(new Date());
         try {
-            professionalService.save(professional);
-            json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+            if (professionalService.save(professional)) {
+                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+            } else {
+                json.put(STATUS_NAME, STATUS_CODE_FILED);
+            }
         } catch (Exception e) {
             json.put(STATUS_NAME, STATUS_CODE_EXCEPTION);
             json.put("msg", e.getMessage());

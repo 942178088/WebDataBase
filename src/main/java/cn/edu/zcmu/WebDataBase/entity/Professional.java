@@ -22,8 +22,6 @@ public class Professional {
     private Institute institute; // 所属院校
     @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Kind.class, optional = false)
     private Kind kind; // 招生类别
-    @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Category.class, optional = false)
-    private Category category; // 所属门类
     @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Subject.class, optional = false)
     private Subject subject; // 所属一级学科
 
@@ -73,14 +71,6 @@ public class Professional {
 
     public void setKind(Kind kind) {
         this.kind = kind;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
     }
 
     public Subject getSubject() {

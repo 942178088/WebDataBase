@@ -75,7 +75,7 @@ public class InstituteController extends BaseController {
                 professionalJson.put("id", professional.getId());
                 professionalJson.put("name", professional.getName());
                 professionalJson.put("code", professional.getpCode());
-                professionalJson.put("category", professional.getCategory().getName());
+                professionalJson.put("category", professional.getSubject().getCategory().getName());
                 professionalJson.put("subject", professional.getSubject().getName());
                 professionalJsons.add(professionalJson);
             }

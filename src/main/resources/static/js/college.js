@@ -7,7 +7,8 @@ var main = new Vue({
         total_elements: 1,
         institute_data: [],
         category_data: [],
-        subject_data: [],
+        child_subject_data: [],
+        father_subject_data: [],
         kind_data: [],
     },
     components: {
@@ -25,7 +26,6 @@ var main = new Vue({
     created: function () {
         loadInstitute();
         loadCategory();
-        loadSubject();
         loadKind();
     },
 });
@@ -47,22 +47,54 @@ function loadCategory() {
     });
 }
 
-// 加载学科
-function loadSubject() {
+// 选择了一级学科
+$("#father_subject_id").change(function () {
     $.ajax({
-        url: '../subject/list',
+        url: '../subject/child_list?id=' + $("#father_subject_id").val(),
         type: 'GET',
         success: function (json) {
             var status = json.status;
             if (statusCodeToBool(status)) {
-                main.subject_data = json.subjects;
+                main.child_subject_data = json.subjects;
             }
         },
         error: function () {
             alert("网络异常")
         }
     });
-}
+});
+
+$("#subject_category_id").change(function () {
+    $.ajax({
+        url: '../subject/father_list?id=' + $("#subject_category_id").val(),
+        type: 'GET',
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                main.father_subject_data = json.subjects;
+            }
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+$("#category_id").change(function () {
+    $.ajax({
+        url: '../subject/father_list?id=' + $("#category_id").val(),
+        type: 'GET',
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                main.father_subject_data = json.subjects;
+            }
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
 
 // 加载学科
 function loadKind() {
@@ -110,6 +142,7 @@ $("#instituteModalFormSubmit").click(function () {
                 loadInstitute();
                 $("#instituteModal").modal('hide');
             }
+            alert(statusCodeToAlert(status));
         },
         error: function () {
             alert("网络异常")
@@ -130,6 +163,7 @@ $("#categoryModalFormSubmit").click(function () {
                 loadCategory();
                 $("#categoryModal").modal('hide');
             }
+            alert(statusCodeToAlert(status));
         },
         error: function () {
             alert("网络异常")
@@ -147,9 +181,9 @@ $("#subjectModalFormSubmit").click(function () {
             var status = json.status;
             if (statusCodeToBool(status)) {
                 loadInstitute();
-                loadSubject();
                 $("#subjectModal").modal('hide');
             }
+            alert(statusCodeToAlert(status));
         },
         error: function () {
             alert("网络异常")
@@ -170,6 +204,7 @@ $("#kindModalFormSubmit").click(function () {
                 loadKind();
                 $("#kindModal").modal('hide');
             }
+            alert(statusCodeToAlert(status));
         },
         error: function () {
             alert("网络异常")
@@ -189,6 +224,7 @@ $("#professionalModalFormSubmit").click(function () {
                 loadInstitute();
                 $("#professionalModal").modal('hide');
             }
+            alert(statusCodeToAlert(status));
         },
         error: function () {
             alert("网络异常")

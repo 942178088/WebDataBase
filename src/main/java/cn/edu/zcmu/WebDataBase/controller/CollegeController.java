@@ -10,13 +10,11 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -42,6 +40,24 @@ public class CollegeController extends BaseController {
     @Autowired
     public CollegeController(ObjectMapper mapper) {
         this.mapper = mapper;
+    }
+
+    @ResponseBody
+    @PostMapping("/add")
+    public ObjectNode add(College college) {
+        json = mapper.createObjectNode();
+        college.setFoundingYear(new Date());
+        try {
+            if (collegeService.save(college)) {
+                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
+            } else {
+                json.put(STATUS_NAME, STATUS_CODE_FILED);
+            }
+        } catch (Exception e) {
+            json.put(STATUS_NAME, STATUS_CODE_EXCEPTION);
+            json.put("msg", e.getMessage());
+        }
+        return json;
     }
 
     @GetMapping(value = "/{idOrCode}")
