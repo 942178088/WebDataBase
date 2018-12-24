@@ -27,14 +27,13 @@ public class SpecialityController extends BaseController<Speciality, Integer> {
 
     @Override
     public BaseService<Speciality, Integer> getService() {
-        return null;
+        return specialityService;
     }
 
     @Autowired
     public SpecialityController(ObjectMapper mapper) {
         this.mapper = mapper;
     }
-
 
     /**
      * 获取院校特性列表

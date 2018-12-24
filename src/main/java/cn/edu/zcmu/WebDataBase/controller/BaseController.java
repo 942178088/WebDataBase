@@ -40,8 +40,15 @@ public abstract class BaseController<T, ID> {
     @InitBinder
     public void initBinder(WebDataBinder binder, WebRequest request) {
         //转换日期 注意这里的转化要和传进来的字符串的格式一直 如2015-9-9 就应该为yyyy-MM-dd
-        DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));// CustomDateEditor为自定义日期编辑器
+    }
+
+    @ResponseBody
+    @GetMapping("/findById")
+    public T findById(ID id) {
+        T t = getService().findById(id);
+        return t;
     }
 
     /**

@@ -61,8 +61,6 @@ public class CategoryService extends BaseService<Category, Integer> {
                 College college = collegeDao.findByName(col[0]);
                 if (college != null) {
                     if (college.getId() > 10) continue;
-                    if (college.getSpecialities() == null) continue;
-                    if (college.getSpecialities().get(0).getName().equals("其他")) continue;
                     Institute institute = instituteDao.findByNameAndCollege(col[1], college.getId());
                     if (institute == null) {
                         institute = new Institute();
@@ -79,6 +77,9 @@ public class CategoryService extends BaseService<Category, Integer> {
                     professional.setpTime(new Date());
                     String code = col[3].substring(0, 4);
                     String cate = col[3].substring(0, 2);
+                    if (col[3].length() == 5) {
+                        col[3] = "0" + col[3];
+                    }
                     Subject subject = subjectDao.findChildCode(col[3]);
                     if (subject == null) {
                         subject = new Subject();
@@ -100,7 +101,16 @@ public class CategoryService extends BaseService<Category, Integer> {
                         }
                     }
                     professional.setSubject(subject);
-                    professionalDao.save(professional);
+                    Professional p = professionalDao.findRepeat(institute.getId(), kind.getId(), subject.getId());
+                    if (p == null) {
+                        try {
+                            professionalDao.save(professional);
+                        } catch (Exception e) {
+                            continue;
+                        }
+                    } else {
+                        continue;
+                    }
                 } else {
                     continue;
                 }

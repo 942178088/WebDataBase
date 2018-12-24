@@ -60,6 +60,15 @@ public class CollegeController extends BaseController<College, Integer> {
 
     @Override
     public ObjectNode add(College college) {
+        if (college.getcNature().getId() != null) {
+            college.setcNature(natureService.findById(college.getcNature().getId()));
+        }
+        if (college.getcType().getId() != null) {
+            college.setcType(typeService.findById(college.getcType().getId()));
+        }
+        if (college.getLocation().getId() != null) {
+            college.setLocation(locationService.findById(college.getLocation().getId()));
+        }
         if (BaseService.checkNullStr(college.getName()) || BaseService.checkNullStr(college.getcCode())) {
             json = mapper.createObjectNode();
             json.put(STATUS_NAME, STATUS_CODE_FILED);

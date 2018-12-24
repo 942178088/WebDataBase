@@ -9,6 +9,8 @@ var main = new Vue({
         speciality_data: [],
         nature_data: [],
         college_data: [],
+        change_college_data: {},
+        change_speciality_data: {},
         type_data: [],
         select_data: {
             speciality_id: [],
@@ -76,14 +78,7 @@ var main = new Vue({
                 main.location_data = data.locations;
             }
         });
-        // 加载特性列表 985 211
-        $.ajax({
-            url: 'speciality/list',
-            type: 'GET',
-            success: function (data) {
-                main.speciality_data = data.specialities;
-            }
-        });
+        loadSpeciality();
         // 加载性质列表 高等院校 科研机构
         $.ajax({
             url: 'nature/list',
@@ -103,6 +98,114 @@ var main = new Vue({
         });
     },
 });
+
+function loadSpeciality() {
+    // 加载特性列表 985 211
+    $.ajax({
+        url: 'speciality/list',
+        type: 'GET',
+        success: function (data) {
+            main.speciality_data = data.specialities;
+        }
+    });
+}
+
+// 删除院校特性
+$("#specialityManagerModalFormDelete").click(function () {
+    $.ajax({
+        url: '../speciality/delete?id=' + $("#specialityManagerSelect").val(),
+        type: 'GET',
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                location.replace("../index.html");
+            }
+            alert(statusCodeToAlert(status));
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+// 修改或保存院校特性
+$("#specialityManagerModalFormSubmit").click(function () {
+    $.ajax({
+        url: '../speciality/add',
+        type: 'POST',
+        data: $("#specialityManagerAddModalForm").serialize(),
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                loadSpeciality();
+                $("#specialityManagerModal").modal('hide');
+            }
+            alert(statusCodeToAlert(status));
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+// 修改院校特性
+$("#specialityManagerSelect").change(function () {
+    $.ajax({
+        url: '../speciality/findById?id=' + $("#specialityManagerSelect").val(),
+        type: 'GET',
+        success: function (json) {
+            main.change_speciality_data = json;
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+// 修改院校
+$("#updateCollegeModalFormSubmit").click(function () {
+    $.ajax({
+        url: '../college/add',
+        type: 'POST',
+        data: $("#updateCollegeModalForm").serialize(),
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                loadCollege();
+                $("#updateCollegeModal").modal('hide');
+            }
+            alert(statusCodeToAlert(status));
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+// 修改院校显示
+function updateCollege(id) {
+    $.ajax({
+        url: '../college/findById?id=' + id,
+        type: 'GET',
+        success: function (json) {
+            main.change_college_data = json;
+            var time = Format(getDate(main.change_college_data.foundingYear.toString()), "yyyy-MM-dd")
+            main.change_college_data.foundingYear = time;
+            var id = [];
+            for (var i = 0; i < main.change_college_data.specialities.length; i++) {
+                id.push(main.change_college_data.specialities[i].id);
+            }
+            $("#change_select_speciality").val(id);
+            $("#change_select_nature").val(main.change_college_data.cNature.id);
+            $("#change_select_kind").val(main.change_college_data.cType.id);
+            $("#change_select_location").val(main.change_college_data.location.id);
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+    $("#updateCollegeModal").modal('show');
+}
 
 // 删除院校
 function deleteCollege(id) {

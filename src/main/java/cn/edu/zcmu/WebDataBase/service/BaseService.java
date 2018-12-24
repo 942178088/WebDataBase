@@ -216,8 +216,7 @@ public abstract class BaseService<T, ID> {
         if (str.length() == 0) return true;
         if (str.trim().equals("")) return true;
         if (str.trim().length() == 0) return true;
-        // 纯html标签
-        if (killHTML(str).trim().length() == 0) return false;
+        if (killHTML(str).trim().length() == 0) return true;
         return false;
     }
 
