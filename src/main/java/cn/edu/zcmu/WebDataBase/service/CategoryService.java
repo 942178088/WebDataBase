@@ -41,6 +41,75 @@ public class CategoryService extends BaseService<Category, Integer> {
     InstituteDao instituteDao;
     @Resource
     SubjectDao subjectDao;
+    @Resource
+    KindDao kindDao;
+    @Resource
+    ProfessionalDao professionalDao;
+
+    public void addTestIn() {
+        String[] kindStrs = {"全日制学硕", "全日制专硕"};
+        for (int i = 0; i < kindStrs.length; i++) {
+            Kind kind = new Kind();
+            kind.setName(kindStrs[i]);
+            kindDao.save(kind);
+        }
+        String line;
+        try {
+            BufferedReader in = new BufferedReader(new FileReader("src/yuanxiao_pro.txt"));
+            while ((line = in.readLine()) != null) {
+                String[] col = line.split(",");
+                College college = collegeDao.findByName(col[0]);
+                if (college != null) {
+                    if (college.getId() > 10) continue;
+                    if (college.getSpecialities() == null) continue;
+                    if (college.getSpecialities().get(0).getName().equals("其他")) continue;
+                    Institute institute = instituteDao.findByNameAndCollege(col[1], college.getId());
+                    if (institute == null) {
+                        institute = new Institute();
+                        institute.setName(col[1]);
+                        institute.setCollege(college);
+                        instituteDao.save(institute);
+                        institute = instituteDao.findByNameAndCollege(col[1], college.getId());
+                    }
+                    Professional professional = new Professional();
+                    Kind kind = new Kind();
+                    kind.setId(1);
+                    professional.setKind(kind);
+                    professional.setInstitute(institute);
+                    professional.setpTime(new Date());
+                    String code = col[3].substring(0, 4);
+                    String cate = col[3].substring(0, 2);
+                    Subject subject = subjectDao.findChildCode(col[3]);
+                    if (subject == null) {
+                        subject = new Subject();
+                        subject.setName(col[2]);
+                        subject.setsCode(col[3]);
+                        Category category = categoryDao.findByCode(cate);
+                        if (category == null) {
+                            continue;
+                        } else {
+                            subject.setCategory(category);
+                            Subject father_subject = subjectDao.findFatherCode(code);
+                            if (father_subject != null) {
+                                subject.setFather_subject(father_subject);
+                            } else {
+                                continue;
+                            }
+                            subjectDao.save(subject);
+                            subject = subjectDao.findChildCode(col[3]);
+                        }
+                    }
+                    professional.setSubject(subject);
+                    professionalDao.save(professional);
+                } else {
+                    continue;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public void addTestPro() {
         String line;

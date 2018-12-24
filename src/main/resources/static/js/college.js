@@ -14,11 +14,11 @@ var main = new Vue({
     components: {
         'institute_components': {
             props: ['institute'],
-            template: '<div class="panel panel-default">\n    <div class="panel-heading">{{institute.name}}</div>\n    <ul class="list-group">\n        <professional_components v-for="professional in institute.professional"\n                                 v-bind:professional="professional"\n                                 v-bind:key="professional.id">\n        </professional_components>\n    </ul>\n</div>',
+            template: '<div class="panel panel-default">\n    <div class="panel-heading">\n        {{institute.name}}\n        <a class="text-danger btn" :href="\'javascript:deleteInstitute(\'+institute.id+\')\'">删除</a>\n    </div>\n    <ul class="list-group">\n        <professional_components v-for="professional in institute.professional"\n                                 v-bind:professional="professional"\n                                 v-bind:key="professional.id">\n        </professional_components>\n    </ul>\n</div>',
             components: {
                 'professional_components': {
                     props: ['professional'],
-                    template: '<li class="list-group-item">{{professional.name}}</li>',
+                    template: '<li class="list-group-item">\n    {{professional.name}}\n    <a class="text-danger" :href="\'javascript:deleteProfessional(\'+professional.id+\')\'">删除</a>\n    <span class="badge">\n        {{professional.code}}\n    </span>\n</li>',
                 }
             }
         },
@@ -28,6 +28,60 @@ var main = new Vue({
         loadCategory();
         loadKind();
     },
+});
+
+// 删除院校
+function deleteProfessional(id) {
+    $.ajax({
+        url: '../professional/delete?id=' + id,
+        type: 'GET',
+        success: function (json) {
+            var status = json.status;
+            alert(statusCodeToAlert(status));
+            if (statusCodeToBool(status)) {
+                location.replace(location.href);
+            }
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+}
+
+// 删除院校
+function deleteInstitute(id) {
+    $.ajax({
+        url: '../institute/delete?id=' + id,
+        type: 'GET',
+        success: function (json) {
+            var status = json.status;
+            alert(statusCodeToAlert(status));
+            if (statusCodeToBool(status)) {
+                location.replace(location.href);
+            }
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+}
+
+// 删除学校
+$("#deleteModalFormSubmit").click(function () {
+    $.ajax({
+        url: '../college/delete?id=' + $("#college_id").val(),
+        type: 'GET',
+        success: function (json) {
+            var status = json.status;
+            alert(statusCodeToAlert(status));
+            if (statusCodeToBool(status)) {
+                location.replace("../index.html");
+            }
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
 });
 
 // 加载门类

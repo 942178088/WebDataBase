@@ -1,6 +1,7 @@
 package cn.edu.zcmu.WebDataBase.controller;
 
 import cn.edu.zcmu.WebDataBase.entity.College;
+import cn.edu.zcmu.WebDataBase.entity.Institute;
 import cn.edu.zcmu.WebDataBase.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -22,12 +22,9 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/college")
-public class CollegeController extends BaseController {
+public class CollegeController extends BaseController<College, Integer> {
     @Resource
     private CollegeService collegeService;
-    private ObjectMapper mapper;
-    private ObjectNode json;
-
     @Resource
     private LocationService locationService;
     @Resource
@@ -36,28 +33,40 @@ public class CollegeController extends BaseController {
     private SpecialityService specialityService;
     @Resource
     private TypeService typeService;
+    @Resource
+    private InstituteService instituteService;
+    @Resource
+    private ProfessionalService professionalService;
+
+    @Override
+    public BaseService<College, Integer> getService() {
+        return collegeService;
+    }
 
     @Autowired
     public CollegeController(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 
-    @ResponseBody
-    @PostMapping("/add")
+    @Override
+    public ObjectNode delete(Integer id) {
+        // 删除学院下属的学院的专业
+        professionalService.deleteByCollege(id);
+        // 删除学院下属的学院
+        instituteService.deleteByCollege(id);
+        // 删除院校
+        return super.delete(id);
+    }
+
+    @Override
     public ObjectNode add(College college) {
-        json = mapper.createObjectNode();
-        college.setFoundingYear(new Date());
-        try {
-            if (collegeService.save(college)) {
-                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
-            } else {
-                json.put(STATUS_NAME, STATUS_CODE_FILED);
-            }
-        } catch (Exception e) {
-            json.put(STATUS_NAME, STATUS_CODE_EXCEPTION);
-            json.put("msg", e.getMessage());
+        if (BaseService.checkNullStr(college.getName()) || BaseService.checkNullStr(college.getcCode())) {
+            json = mapper.createObjectNode();
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+            return json;
+        } else {
+            return super.add(college);
         }
-        return json;
     }
 
     @GetMapping(value = "/{idOrCode}")

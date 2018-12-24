@@ -1,6 +1,7 @@
 package cn.edu.zcmu.WebDataBase.dao;
 
 import cn.edu.zcmu.WebDataBase.entity.Professional;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -13,5 +14,9 @@ public interface ProfessionalDao extends PagingAndSortingRepository<Professional
 
     @Query(value = "SELECT * FROM professionals WHERE institute_id = ?1", nativeQuery = true)
     List<Professional> findByInstitute(Integer id);
+
+    @Modifying
+    @Query(value = "DELETE FROM professionals WHERE professionals.institute_id IN (SELECT institutes.id FROM institutes WHERE institutes.college_id = ?1)", nativeQuery = true)
+    void deleteByCollege(Integer college_id);
 
 }

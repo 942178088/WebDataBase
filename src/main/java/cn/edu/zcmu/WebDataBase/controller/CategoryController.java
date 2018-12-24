@@ -1,6 +1,7 @@
 package cn.edu.zcmu.WebDataBase.controller;
 
 import cn.edu.zcmu.WebDataBase.entity.Category;
+import cn.edu.zcmu.WebDataBase.service.BaseService;
 import cn.edu.zcmu.WebDataBase.service.CategoryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -8,7 +9,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -21,11 +21,14 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/category")
-public class CategoryController extends BaseController {
+public class CategoryController extends BaseController<Category, Integer> {
     @Resource
     private CategoryService categoryService;
-    private ObjectMapper mapper;
-    private ObjectNode json;
+
+    @Override
+    public BaseService<Category, Integer> getService() {
+        return categoryService;
+    }
 
     @Autowired
     public CategoryController(ObjectMapper mapper) {
@@ -37,6 +40,7 @@ public class CategoryController extends BaseController {
     public String test() {
         categoryService.addTestData();
         categoryService.addTestPro();
+        categoryService.addTestIn();
         return "test";
     }
 
@@ -61,24 +65,15 @@ public class CategoryController extends BaseController {
         return json;
     }
 
-    /**
-     * 增加门类
-     */
-    @ResponseBody
-    @PostMapping("/add")
+    @Override
     public ObjectNode add(Category category) {
-        json = mapper.createObjectNode();
         category.setcTime(new Date());
-        try {
-            if (categoryService.save(category)) {
-                json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
-            } else {
-                json.put(STATUS_NAME, STATUS_CODE_FILED);
-            }
-        } catch (Exception e) {
-            json.put(STATUS_NAME, STATUS_CODE_EXCEPTION);
-            json.put("msg", e.getMessage());
+        if (BaseService.checkNullStr(category.getName()) || BaseService.checkNullStr(category.getcCode())) {
+            json = mapper.createObjectNode();
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+            return json;
+        } else {
+            return super.add(category);
         }
-        return json;
     }
 }

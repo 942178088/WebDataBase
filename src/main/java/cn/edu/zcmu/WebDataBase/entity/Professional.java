@@ -12,10 +12,6 @@ public class Professional {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(unique = true, nullable = false, length = 50)
-    private String name; // 中文名称
-    @Column(unique = true, nullable = false, length = 20)
-    private String pCode; // 专业代码
     @Column(nullable = false)
     private Date pTime; // 招生年份
     @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Institute.class, optional = false)
@@ -23,7 +19,7 @@ public class Professional {
     @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Kind.class, optional = false)
     private Kind kind; // 招生类别
     @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Subject.class, optional = false)
-    private Subject subject; // 所属一级学科
+    private Subject subject; // 所属二级学科
 
     public Integer getId() {
         return id;
@@ -31,22 +27,6 @@ public class Professional {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getpCode() {
-        return pCode;
-    }
-
-    public void setpCode(String pCode) {
-        this.pCode = pCode;
     }
 
     public Date getpTime() {

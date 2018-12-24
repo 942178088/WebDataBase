@@ -1,8 +1,7 @@
 package cn.edu.zcmu.WebDataBase.controller;
 
-import cn.edu.zcmu.WebDataBase.entity.Category;
 import cn.edu.zcmu.WebDataBase.entity.Kind;
-import cn.edu.zcmu.WebDataBase.service.CategoryService;
+import cn.edu.zcmu.WebDataBase.service.BaseService;
 import cn.edu.zcmu.WebDataBase.service.KindService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,20 +21,20 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/kind")
-public class KindController extends BaseController {
+public class KindController extends BaseController<Kind,Integer> {
     @Resource
     private KindService kindService;
-    private ObjectMapper mapper;
-    private ObjectNode json;
+
+    @Override
+    public BaseService<Kind, Integer> getService() {
+        return null;
+    }
 
     @Autowired
     public KindController(ObjectMapper mapper) {
         this.mapper = mapper;
     }
 
-    /**
-     * 种类列表
-     */
     @ResponseBody
     @GetMapping("/list")
     public ObjectNode list() {
@@ -54,13 +52,14 @@ public class KindController extends BaseController {
         return json;
     }
 
-    /**
-     * 增加门类
-     */
     @ResponseBody
     @PostMapping("/add")
     public ObjectNode add(Kind kind) {
         json = mapper.createObjectNode();
+        if (BaseService.checkNullStr(kind.getName())) {
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+            return json;
+        }
         try {
             kindService.save(kind);
             json.put(STATUS_NAME, STATUS_CODE_SUCCESS);

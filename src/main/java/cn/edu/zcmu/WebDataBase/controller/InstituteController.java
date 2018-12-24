@@ -2,6 +2,7 @@ package cn.edu.zcmu.WebDataBase.controller;
 
 import cn.edu.zcmu.WebDataBase.entity.Institute;
 import cn.edu.zcmu.WebDataBase.entity.Professional;
+import cn.edu.zcmu.WebDataBase.service.BaseService;
 import cn.edu.zcmu.WebDataBase.service.InstituteService;
 import cn.edu.zcmu.WebDataBase.service.ProfessionalService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,14 +24,17 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/institute")
-public class InstituteController extends BaseController {
+public class InstituteController extends BaseController<Institute, Integer> {
     @Resource
     private InstituteService instituteService;
-    private ObjectMapper mapper;
-    private ObjectNode json;
 
     @Resource
     private ProfessionalService professionalService;
+
+    @Override
+    public BaseService<Institute, Integer> getService() {
+        return instituteService;
+    }
 
     @Autowired
     public InstituteController(ObjectMapper mapper) {
@@ -44,6 +48,10 @@ public class InstituteController extends BaseController {
     @PostMapping("/add")
     public ObjectNode add(Institute institute) {
         json = mapper.createObjectNode();
+        if (BaseService.checkNullStr(institute.getName())) {
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+            return json;
+        }
         institute.setiTime(new Date());
         try {
             instituteService.save(institute);
@@ -73,10 +81,9 @@ public class InstituteController extends BaseController {
             for (Professional professional : professionals) {
                 ObjectNode professionalJson = mapper.createObjectNode();
                 professionalJson.put("id", professional.getId());
-                professionalJson.put("name", professional.getName());
-                professionalJson.put("code", professional.getpCode());
+                professionalJson.put("name", professional.getSubject().getName());
+                professionalJson.put("code", professional.getSubject().getsCode());
                 professionalJson.put("category", professional.getSubject().getCategory().getName());
-                professionalJson.put("subject", professional.getSubject().getName());
                 professionalJsons.add(professionalJson);
             }
             institureJson.set("professional", professionalJsons);

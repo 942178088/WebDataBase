@@ -1,6 +1,7 @@
 package cn.edu.zcmu.WebDataBase.controller;
 
 import cn.edu.zcmu.WebDataBase.entity.Speciality;
+import cn.edu.zcmu.WebDataBase.service.BaseService;
 import cn.edu.zcmu.WebDataBase.service.SpecialityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -20,12 +21,14 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/speciality")
-public class SpecialityController extends BaseController {
+public class SpecialityController extends BaseController<Speciality, Integer> {
     @Resource
     private SpecialityService specialityService;
 
-    private ObjectMapper mapper;
-    private ObjectNode json;
+    @Override
+    public BaseService<Speciality, Integer> getService() {
+        return null;
+    }
 
     @Autowired
     public SpecialityController(ObjectMapper mapper) {

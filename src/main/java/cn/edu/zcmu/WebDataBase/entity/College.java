@@ -15,19 +15,24 @@ public class College {
     private Integer id;
     @Column(unique = true, nullable = false, length = 50)
     private String name; // 中文名称
-    @Column(unique = true)
+    @Column(unique = true, nullable = false, length = 15)
     private String cCode; // 代码
+    @Column(length = 15)
     private String cPartition; // 所处分区
     @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Nature.class, optional = false)
     private Nature cNature; // 性质
     @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Type.class, optional = false)
     private Type cType; // 类型
-    private Integer ranking; // 排名
+    private Integer ranking; // 综合排名
     private Integer areaCompetitiveRanking; // 地区竞争力排行
     private Integer collegesCompetitiveRanking; // 院校竞争力排行
+    @Column(length = 100)
     private String phoneNumber; // 联系方式
+    @Column(length = 300)
     private String badgeUrl; // 校徽 图片URL
+    @Column(length = 300)
     private String imgUrl; // 图片URL
+    @Column(length = 500)
     private String cDescription; // 介绍
     private Date foundingYear; // 创建时间
     @ManyToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER, targetEntity = Location.class, optional = false)

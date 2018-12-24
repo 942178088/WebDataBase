@@ -11,4 +11,7 @@ public interface CategoryDao extends PagingAndSortingRepository<Category, Intege
 
     @Query(value = "SELECT * FROM categorys WHERE categorys.name = ?1", nativeQuery = true)
     Category findByName(String name);
+
+    @Query(value = "SELECT * FROM categorys WHERE categorys.c_code = ?1", nativeQuery = true)
+    Category findByCode(String code);
 }

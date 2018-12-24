@@ -19,6 +19,15 @@ public class ProfessionalService extends BaseService<Professional, Integer> {
         return professionalDao;
     }
 
+    public boolean deleteByCollege(Integer college_id) {
+        try {
+            professionalDao.deleteByCollege(college_id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     /**
      * 根据院校寻找
      */

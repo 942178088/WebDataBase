@@ -24,6 +24,7 @@ var main = new Vue({
             {name: '排名'},
             {name: '创立时间'},
             {name: '所在地'},
+            {name: '操作'},
         ],
         colleges_null: [{
             "location_id": '#',
@@ -102,6 +103,24 @@ var main = new Vue({
         });
     },
 });
+
+// 删除院校
+function deleteCollege(id) {
+    $.ajax({
+        url: '../college/delete?id=' + id,
+        type: 'GET',
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                location.replace("../index.html");
+            }
+            alert(statusCodeToAlert(status));
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+}
 
 // 选中类别
 function selectType(id) {

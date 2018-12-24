@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>主页 - 考研数据库</title>
 
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/base.css" rel="stylesheet">
 
     <!--[if lt IE 9]>
@@ -91,15 +91,44 @@
                                 <div class="modal-body">
                                     <form id="addModalForm">
                                         <div class="form-group">
-                                            <label>院校名称</label>
-                                            <input name="name" type="text" class="form-control">
+                                            <label>院校名称<span class="text-danger">*</span></label>
+                                            <input name="name" type="text" class="form-control"
+                                                   placeholder="浙江中医药大学">
                                         </div>
                                         <div class="form-group">
-                                            <label>院校代码</label>
-                                            <input name="cCode" type="text" class="form-control">
+                                            <label>院校代码<span class="text-danger">*</span></label>
+                                            <input name="cCode" type="text" class="form-control"
+                                                   placeholder="10344">
                                         </div>
                                         <div class="form-group">
-                                            <label>地区</label>
+                                            <label>院校特性<span class="text-danger">*</span></label>
+                                            <select multiple class="form-control">
+                                                <option v-for="speciality in speciality_data"
+                                                        :value="speciality.id">
+                                                    {{speciality.name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>院校性质<span class="text-danger">*</span></label>
+                                            <select name="cNature.id" class="form-control">
+                                                <option v-for="nature in nature_data"
+                                                        :value="nature.id">
+                                                    {{nature.name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>院校类型<span class="text-danger">*</span></label>
+                                            <select name="cType.id" class="form-control">
+                                                <option v-for="type in type_data"
+                                                        :value="type.id">
+                                                    {{type.name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>地区<span class="text-danger">*</span></label>
                                             <select name="location.id" class="form-control">
                                                 <option v-for="location in location_data"
                                                         :value="location.id">
@@ -107,22 +136,44 @@
                                                 </option>
                                             </select>
                                         </div>
-                                        <label>院校性质</label>
-                                        <select name="cNature.id" class="form-control">
-                                            <option v-for="nature in nature_data"
-                                                    :value="nature.id">
-                                                {{nature.name}}
-                                            </option>
-                                        </select>
-                                        <label>院校类型</label>
-                                        <select name="cType.id" class="form-control">
-                                            <option v-for="type in type_data"
-                                                    :value="type.id">
-                                                {{type.name}}
-                                            </option>
-                                        </select>
-                                        <label>院校简介</label>
-                                        <textarea name="cDescription" class="form-control"></textarea>
+                                        <div class="form-group">
+                                            <label>创立时间</label>
+                                            <input name="foundingYear" type="date" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>所处分区</label>
+                                            <input name="cPartition" type="text" class="form-control"
+                                                   placeholder="一区">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>综合排名</label>
+                                            <input name="ranking" type="text" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>地区竞争力排行</label>
+                                            <input name="areaCompetitiveRanking" type="text" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>院校竞争力排行</label>
+                                            <input name="collegesCompetitiveRanking" type="text" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>联系方式</label>
+                                            <input name="phoneNumber" type="text" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>校徽图片链接</label>
+                                            <input name="badgeUrl" type="text" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>院校展示图片链接</label>
+                                            <input name="imgUrl" type="text" class="form-control"
+                                                   value="http://college.koolearn.com/upload/school/kaoyan/10004.jpg">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>院校简介</label>
+                                            <textarea name="cDescription" class="form-control"></textarea>
+                                        </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
@@ -168,12 +219,16 @@
                         <td>{{college.ranking}}</td>
                         <td>{{college.foundingYear}}</td>
                         <td>{{college.location}}</td>
+                        <td>
+                            <a class="text-success" :href="'javascript:updateCollege('+college.id+')'">修改</a>
+                            <a class="text-danger" :href="'javascript:deleteCollege('+college.id+')'">删除</a>
+                        </td>
                     </tr>
                     </tbody>
                     <tfoot>
                     <tr>
                         <td colspan="3">页数：{{page}} / {{total_pages}}</td>
-                        <td colspan="2">总条数：{{total_elements}}</td>
+                        <td colspan="3">总条数：{{total_elements}}</td>
                         <td colspan="2">
                             每页条数：
                             <select id="page_size_select">
@@ -274,9 +329,9 @@
 }();
 </script>
 <!--<script src="js/vue.js"></script>-->
-<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
-<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="js/vue_dev.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <script src="js/base.js"></script>
 <script src="js/index.js"></script>
 </body>

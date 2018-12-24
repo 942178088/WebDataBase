@@ -1,6 +1,7 @@
 package cn.edu.zcmu.WebDataBase.controller;
 
 import cn.edu.zcmu.WebDataBase.entity.Type;
+import cn.edu.zcmu.WebDataBase.service.BaseService;
 import cn.edu.zcmu.WebDataBase.service.TypeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -20,12 +21,14 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/type")
-public class TypeController extends BaseController {
+public class TypeController extends BaseController<Type, Integer> {
     @Resource
     private TypeService typeService;
 
-    private ObjectMapper mapper;
-    private ObjectNode json;
+    @Override
+    public BaseService<Type, Integer> getService() {
+        return typeService;
+    }
 
     @Autowired
     public TypeController(ObjectMapper mapper) {

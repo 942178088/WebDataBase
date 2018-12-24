@@ -18,11 +18,21 @@ public class InstituteService extends BaseService<Institute, Integer> {
         return instituteDao;
     }
 
+    public boolean deleteByCollege(Integer college_id) {
+        try {
+            instituteDao.deleteByCollege(college_id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     /**
      * 根据院校寻找
      */
     public List<Institute> findAllByCollege(Integer id) {
         return instituteDao.findByCollege(id);
     }
+
 
 }
