@@ -60,7 +60,7 @@ public class CategoryService extends BaseService<Category, Integer> {
                 String[] col = line.split(",");
                 College college = collegeDao.findByName(col[0]);
                 if (college != null) {
-                    if (college.getId() > 10) continue;
+//                    if (college.getId() > 10) continue;
                     Institute institute = instituteDao.findByNameAndCollege(col[1], college.getId());
                     if (institute == null) {
                         institute = new Institute();

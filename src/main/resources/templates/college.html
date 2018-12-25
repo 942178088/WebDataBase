@@ -31,7 +31,7 @@
                 </li>
                 <li th:text="${college.name}" class="active"></li>
             </ol>
-            <div class="col-sm-8">
+            <div class="col-sm-7">
                 <input id="college_id" hidden th:value="${college.id}">
                 <h3>
                     <span th:text="${college.name}"></span>
@@ -55,7 +55,7 @@
                     </institute_components>
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-5">
                 <div class="logo">
                     <img th:src="${college.imgUrl}" class="img-responsive" alt="Responsive image">
                 </div>
@@ -87,7 +87,7 @@
                         </div>
                     </div>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#instituteModal">
-                        添加学院
+                        管理学院
                     </button>
                     <div id="instituteModal" class="modal fade"
                          tabindex="-1" role="dialog" aria-labelledby="instituteModalLabel">
@@ -96,13 +96,26 @@
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="instituteModalLabel">添加学院</h4>
+                                    <h4 class="modal-title" id="instituteModalLabel">管理学院</h4>
                                 </div>
                                 <div class="modal-body">
+                                    <select id="institute_select_id" class="form-control">
+                                        <option value="-1">-- 添加学院 --</option>
+                                        <option v-for="institute in institute_data"
+                                                :value="institute.id">
+                                            {{institute.name}}
+                                        </option>
+                                    </select>
                                     <form id="instituteModalForm">
                                         <div class="form-group">
-                                            <label>学院名称</label>
-                                            <input name="name" type="text" class="form-control">
+                                            <label>ID</label>
+                                            <input name="id" type="text" class="form-control"
+                                                   readonly :value="select_institute_data.id">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>名称</label>
+                                            <input name="name" type="text" class="form-control"
+                                                   :value="select_institute_data.name">
                                         </div>
                                         <input name="college.id" hidden th:value="${college.id}">
                                     </form>
@@ -116,7 +129,7 @@
                         </div>
                     </div>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#professionalModal">
-                        添加专业
+                        管理专业
                     </button>
                     <div id="professionalModal" class="modal fade"
                          tabindex="-1" role="dialog" aria-labelledby="instituteModalLabel">
@@ -129,44 +142,58 @@
                                 </div>
                                 <div class="modal-body">
                                     <form id="professionalModalForm">
-                                        <label>学院</label>
-                                        <select name="institute.id" class="form-control">
-                                            <option v-for="institute in institute_data"
-                                                    :value="institute.id">
-                                                {{institute.name}}
-                                            </option>
-                                        </select>
-                                        <label>种类</label>
-                                        <select name="kind.id" class="form-control">
-                                            <option v-for="kind in kind_data"
-                                                    :value="kind.id">
-                                                {{kind.name}}
-                                            </option>
-                                        </select>
-                                        <label>门类</label>
-                                        <select id="category_id" class="form-control">
-                                            <option value="-1">-- 请选择门类 --</option>
-                                            <option v-for="category in category_data"
-                                                    :value="category.id">
-                                                {{category.name}}[{{category.code}}]
-                                            </option>
-                                        </select>
-                                        <label>一级学科</label>
-                                        <select id="father_subject_id" class="form-control">
-                                            <option value="-1">-- 请选择一级学科 --</option>
-                                            <option v-for="subject in father_subject_data"
-                                                    :value="subject.id">
-                                                {{subject.name}}[{{subject.code}}]
-                                            </option>
-                                        </select>
-                                        <label>二级学科</label>
-                                        <select name="subject.id" class="form-control">
-                                            <option value="-1">-- 请选择二级学科 --</option>
-                                            <option v-for="subject in child_subject_data"
-                                                    :value="subject.id">
-                                                {{subject.name}}[{{subject.code}}]
-                                            </option>
-                                        </select>
+                                        <div class="form-group">
+                                            <label>创建时间</label>
+                                            <input name="pTime" type="date" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>学院</label>
+                                            <select name="institute.id" class="form-control">
+                                                <option v-for="institute in institute_data"
+                                                        :value="institute.id">
+                                                    {{institute.name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>种类</label>
+                                            <select name="kind.id" class="form-control">
+                                                <option v-for="kind in kind_data"
+                                                        :value="kind.id">
+                                                    {{kind.name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>门类</label>
+                                            <select id="category_id" class="form-control">
+                                                <option value="-1">-- 请选择门类 --</option>
+                                                <option v-for="category in category_data"
+                                                        :value="category.id">
+                                                    {{category.name}}[{{category.code}}]
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>一级学科</label>
+                                            <select id="father_subject_id" class="form-control">
+                                                <option value="-1">-- 请选择一级学科 --</option>
+                                                <option v-for="subject in father_subject_data"
+                                                        :value="subject.id">
+                                                    {{subject.name}}[{{subject.code}}]
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>二级学科</label>
+                                            <select name="subject.id" class="form-control">
+                                                <option value="-1">-- 请选择二级学科 --</option>
+                                                <option v-for="subject in child_subject_data"
+                                                        :value="subject.id">
+                                                    {{subject.name}}[{{subject.code}}]
+                                                </option>
+                                            </select>
+                                        </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
@@ -181,7 +208,7 @@
                 </div>
                 <div class="mt-10">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#categoryModal">
-                        添加门类
+                        管理门类
                     </button>
                     <div id="categoryModal" class="modal fade"
                          tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel">
@@ -190,22 +217,42 @@
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="categoryModalLabel">添加门类</h4>
+                                    <h4 class="modal-title" id="categoryModalLabel">管理门类</h4>
                                 </div>
                                 <div class="modal-body">
+                                    <div class="form-group">
+                                        <label>地区</label>
+                                        <select id="categoryManagerSelect" class="form-control">
+                                            <option value="-1">- 添加门类 -</option>
+                                            <option v-for="category in category_data"
+                                                    :value="category.id">
+                                                {{category.name}}
+                                            </option>
+                                        </select>
+                                    </div>
                                     <form id="categoryModalForm">
                                         <div class="form-group">
+                                            <label>ID</label>
+                                            <input name="id" type="text" class="form-control"
+                                                   :value="change_category_data.id" readonly>
+                                        </div>
+                                        <div class="form-group">
                                             <label>门类名称</label>
-                                            <input name="name" type="text" class="form-control" required>
+                                            <input name="name" type="text" class="form-control" required
+                                                   :value="change_category_data.name">
                                         </div>
                                         <div class="form-group">
                                             <label>门类代码</label>
-                                            <input name="cCode" type="text" class="form-control" required>
+                                            <input name="cCode" type="text" class="form-control" required
+                                                   :value="change_category_data.cCode">
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button id="categoryManagerModalFormDelete" type="button" class="btn btn-danger">
+                                        删除
+                                    </button>
                                     <button id="categoryModalFormSubmit" type="button" class="btn btn-primary">
                                         保存
                                     </button>
@@ -214,7 +261,7 @@
                         </div>
                     </div>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#subjectModal">
-                        添加学科
+                        管理一级学科
                     </button>
                     <div id="subjectModal" class="modal fade"
                          tabindex="-1" role="dialog" aria-labelledby="subjectModalLabel">
@@ -223,42 +270,56 @@
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="subjectModalLabel">添加学科</h4>
+                                    <h4 class="modal-title" id="subjectModalLabel">管理一级学科</h4>
                                 </div>
                                 <div class="modal-body">
                                     <form id="subjectModalForm">
-                                        <label>门类</label>
-                                        <select id="subject_category_id" name="category.id" class="form-control">
-                                            <option value="-1">
-                                                -- 选择门类 --
-                                            </option>
-                                            <option v-for="category in category_data"
-                                                    :value="category.id">
-                                                {{category.name}}[{{category.code}}]
-                                            </option>
-                                        </select>
-                                        <label>一级学科</label>
-                                        <select name="father_subject.id" class="form-control">
-                                            <option value="-1">
-                                                -- 创建一级学科 --
-                                            </option>
-                                            <option v-for="subject in father_subject_data"
-                                                    :value="subject.id">
-                                                {{subject.name}}[{{subject.code}}]
-                                            </option>
-                                        </select>
+                                        <div class="form-group">
+                                            <label>门类</label>
+                                            <select id="subject_category_id" name="category.id" class="form-control">
+                                                <option value="-1">
+                                                    -- 选择门类 --
+                                                </option>
+                                                <option v-for="category in category_data"
+                                                        :value="category.id">
+                                                    {{category.name}}[{{category.code}}]
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>一级学科</label>
+                                            <select id="father_subject__id" class="form-control">
+                                                <option value="-1">
+                                                    -- 创建一级学科 --
+                                                </option>
+                                                <option v-for="subject in father_subject_data"
+                                                        :value="subject.id">
+                                                    {{subject.name}}[{{subject.code}}]
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>ID</label>
+                                            <input name="id" type="text" class="form-control" readonly
+                                                   :value="change_father_subject_data.id">
+                                        </div>
                                         <div class="form-group">
                                             <label>学科名称</label>
-                                            <input name="name" type="text" class="form-control" required>
+                                            <input name="name" type="text" class="form-control" required
+                                                   :value="change_father_subject_data.name">
                                         </div>
                                         <div class="form-group">
                                             <label>学科代码</label>
-                                            <input name="sCode" type="text" class="form-control" required>
+                                            <input name="sCode" type="text" class="form-control" required
+                                                   :value="change_father_subject_data.sCode">
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button id="subjectManagerModalFormDelete" type="button" class="btn btn-danger">
+                                        删除
+                                    </button>
                                     <button id="subjectModalFormSubmit" type="button" class="btn btn-primary">
                                         保存
                                     </button>
@@ -266,8 +327,86 @@
                             </div>
                         </div>
                     </div>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#subject2Modal">
+                        管理二级学科
+                    </button>
+                    <div id="subject2Modal" class="modal fade"
+                         tabindex="-1" role="dialog" aria-labelledby="subject2ModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="subject2ModalLabel">管理二级学科</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="subject2ModalForm">
+                                        <div class="form-group">
+                                            <label>门类</label>
+                                            <select id="subject2_category_id" name="category.id" class="form-control">
+                                                <option value="-1">
+                                                    -- 选择门类 --
+                                                </option>
+                                                <option v-for="category in category_data"
+                                                        :value="category.id">
+                                                    {{category.name}}[{{category.code}}]
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>一级学科</label>
+                                            <select id="father_subject2_id" name="father_subject.id"
+                                                    class="form-control">
+                                                <option value="-1">- 请选择父类一级学科 -</option>
+                                                <option v-for="subject in father_subject_data"
+                                                        :value="subject.id">
+                                                    {{subject.name}}[{{subject.code}}]
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>二级学科</label>
+                                            <select id="child_subject__id" class="form-control">
+                                                <option value="-1">
+                                                    -- 创建二级学科 --
+                                                </option>
+                                                <option v-for="subject in child_subject_data"
+                                                        :value="subject.id">
+                                                    {{subject.name}}[{{subject.code}}]
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>ID</label>
+                                            <input name="id" type="text" class="form-control" readonly
+                                                   :value="change_father_subject_data.id">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>学科名称</label>
+                                            <input name="name" type="text" class="form-control" required
+                                                   :value="change_father_subject_data.name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>学科代码</label>
+                                            <input name="sCode" type="text" class="form-control" required
+                                                   :value="change_father_subject_data.sCode">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button id="subject2ManagerModalFormDelete" type="button" class="btn btn-danger">
+                                        删除
+                                    </button>
+                                    <button id="subject2ModalFormSubmit" type="button" class="btn btn-primary">
+                                        保存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#kindModal">
-                        添加种类
+                        管理种类
                     </button>
                     <div id="kindModal" class="modal fade"
                          tabindex="-1" role="dialog" aria-labelledby="kindModalLabel">
@@ -276,18 +415,39 @@
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="kindModalLabel">添加种类</h4>
+                                    <h4 class="modal-title" id="kindModalLabel">管理种类</h4>
                                 </div>
                                 <div class="modal-body">
+                                    <form id="kindManagerModalForm">
+                                        <div class="form-group">
+                                            <label>种类</label>
+                                            <select id="kindManagerSelect" class="form-control">
+                                                <option value="-1">- 添加种类 -</option>
+                                                <option v-for="kind in kind_data"
+                                                        :value="kind.id">
+                                                    {{kind.name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </form>
                                     <form id="kindModalForm">
                                         <div class="form-group">
+                                            <label>ID</label>
+                                            <input name="id" type="text" class="form-control" readonly
+                                                   :value="change_kind_data.id">
+                                        </div>
+                                        <div class="form-group">
                                             <label>种类名称</label>
-                                            <input name="name" type="text" class="form-control" required>
+                                            <input name="name" type="text" class="form-control" required
+                                                   :value="change_kind_data.name">
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button id="kindManagerModalFormDelete" type="button" class="btn btn-danger">
+                                        删除
+                                    </button>
                                     <button id="kindModalFormSubmit" type="button" class="btn btn-primary">
                                         保存
                                     </button>
@@ -303,8 +463,9 @@
 </div>
 
 <footer class="footer">
-    <p>陈健&nbsp;孟凡锦&nbsp;王浩银&nbsp;汪恒</p>
-    <p>所有数据均来自网络搜集，仅供参考</p>
+    <p>陈健(演讲)&nbsp;王浩银(PPT制作)&nbsp;孟凡锦(爬虫数据收集、文档编写)&nbsp;汪恒(代码实现)</p>
+    <p>后端框架:SpringBoot&nbsp;前端框架:Vue.js&nbsp;数据库:MySQL</p>
+    <p>所有数据均来自网络搜集，仅供演示</p>
 </footer>
 
 <script type="text/javascript" th:src="@{~/js/canvas-nest.min.js}">

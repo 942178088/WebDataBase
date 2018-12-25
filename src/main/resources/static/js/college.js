@@ -6,7 +6,11 @@ var main = new Vue({
         total_pages: 1,
         total_elements: 1,
         institute_data: [],
+        select_institute_data: {},
         category_data: [],
+        change_category_data: {},
+        change_kind_data: {},
+        change_father_subject_data: {},
         child_subject_data: [],
         father_subject_data: [],
         kind_data: [],
@@ -18,7 +22,7 @@ var main = new Vue({
             components: {
                 'professional_components': {
                     props: ['professional'],
-                    template: '<li class="list-group-item">\n    {{professional.name}}\n    <a class="text-danger" :href="\'javascript:deleteProfessional(\'+professional.id+\')\'">删除</a>\n    <span class="badge">\n        {{professional.code}}\n    </span>\n</li>',
+                    template: '<li class="list-group-item">\n    {{professional.name}}\n    <span class="badge">\n        {{professional.code}}\n    </span>\n    <span class="badge">\n        {{professional.category}}\n    </span>\n    <span class="badge">\n        {{professional.kind}}\n    </span>\n    <a class="text-danger" :href="\'javascript:deleteProfessional(\'+professional.id+\')\'">删除</a>\n</li>',
                 }
             }
         },
@@ -30,7 +34,102 @@ var main = new Vue({
     },
 });
 
-// 删除院校
+// 修改院校特性
+$("#institute_select_id").change(function () {
+    $.ajax({
+        url: '../institute/findById?id=' + $("#institute_select_id").val(),
+        type: 'GET',
+        success: function (json) {
+            main.select_institute_data = json;
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+// 修改院校特性
+$("#kindManagerSelect").change(function () {
+    $.ajax({
+        url: '../kind/findById?id=' + $("#kindManagerSelect").val(),
+        type: 'GET',
+        success: function (json) {
+            main.change_kind_data = json;
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+// 删除院校特性
+$("#kindManagerModalFormDelete").click(function () {
+    $.ajax({
+        url: '../kind/delete?id=' + $("#kindManagerSelect").val(),
+        type: 'GET',
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                location.replace(location.href);
+            }
+            alert(statusCodeToAlert(status));
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+$("#categoryManagerModalFormDelete").click(function () {
+    $.ajax({
+        url: '../category/delete?id=' + $("#categoryManagerSelect").val(),
+        type: 'GET',
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                loadCategory();
+                $("#categoryManagerModal").modal('hide');
+            }
+            alert(statusCodeToAlert(status));
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+$("#categoryManagerModalFormSubmit").click(function () {
+    $.ajax({
+        url: '../category/add',
+        type: 'POST',
+        data: $("#categoryManagerAddModalForm").serialize(),
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                loadCategory();
+                $("#categoryManagerModal").modal('hide');
+            }
+            alert(statusCodeToAlert(status));
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+$("#categoryManagerSelect").change(function () {
+    $.ajax({
+        url: '../category/findById?id=' + $("#categoryManagerSelect").val(),
+        type: 'GET',
+        success: function (json) {
+            main.change_category_data = json;
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
 function deleteProfessional(id) {
     $.ajax({
         url: '../professional/delete?id=' + id,
@@ -101,10 +200,9 @@ function loadCategory() {
     });
 }
 
-// 选择了一级学科
-$("#father_subject_id").change(function () {
+function changFatherSubject(id) {
     $.ajax({
-        url: '../subject/child_list?id=' + $("#father_subject_id").val(),
+        url: '../subject/child_list?id=' + $("#" + id).val(),
         type: 'GET',
         success: function (json) {
             var status = json.status;
@@ -116,11 +214,84 @@ $("#father_subject_id").change(function () {
             alert("网络异常")
         }
     });
+}
+
+$("#subject2ManagerModalFormDelete").click(function () {
+    $.ajax({
+        url: '../subject/delete?id=' + $("#child_subject__id").val(),
+        type: 'GET',
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                location.replace(location.href);
+            }
+            alert(statusCodeToAlert(status));
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
 });
 
-$("#subject_category_id").change(function () {
+// 删除学科
+$("#subjectManagerModalFormDelete").click(function () {
     $.ajax({
-        url: '../subject/father_list?id=' + $("#subject_category_id").val(),
+        url: '../subject/delete?id=' + $("#father_subject__id").val(),
+        type: 'GET',
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                location.replace(location.href);
+            }
+            alert(statusCodeToAlert(status));
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+$("#child_subject__id").change(function () {
+    $.ajax({
+        url: '../subject/findById?id=' + $("#child_subject__id").val(),
+        type: 'GET',
+        success: function (json) {
+            main.change_father_subject_data = json;
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+// 选择了一级学科
+$("#father_subject__id").change(function () {
+    $("#child_subject__id").val(-1);
+    $.ajax({
+        url: '../subject/findById?id=' + $("#father_subject__id").val(),
+        type: 'GET',
+        success: function (json) {
+            main.change_father_subject_data = json;
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+    changFatherSubject("father_subject__id");
+});
+
+$("#father_subject2_id").change(function () {
+    changFatherSubject("father_subject2_id");
+});
+
+// 选择了一级学科
+$("#father_subject_id").change(function () {
+    changFatherSubject("father_subject_id");
+});
+
+function changSubject(id) {
+    $.ajax({
+        url: '../subject/father_list?id=' + $("#" + id).val(),
         type: 'GET',
         success: function (json) {
             var status = json.status;
@@ -132,6 +303,14 @@ $("#subject_category_id").change(function () {
             alert("网络异常")
         }
     });
+}
+
+$("#subject2_category_id").change(function () {
+    changSubject("subject2_category_id");
+});
+
+$("#subject_category_id").change(function () {
+    changSubject("subject_category_id");
 });
 
 $("#category_id").change(function () {
@@ -224,6 +403,27 @@ $("#categoryModalFormSubmit").click(function () {
         }
     });
 });
+
+
+$("#subject2ModalFormSubmit").click(function () {
+    $.ajax({
+        url: '../subject/add',
+        type: 'POST',
+        data: $("#subject2ModalForm").serialize(),
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                loadInstitute();
+                $("#subject2Modal").modal('hide');
+            }
+            alert(statusCodeToAlert(status));
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
 
 // 添加学科
 $("#subjectModalFormSubmit").click(function () {

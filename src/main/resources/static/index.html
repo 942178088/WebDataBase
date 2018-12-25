@@ -73,12 +73,12 @@
                                 <form id="specialityManagerAddModalForm">
                                     <div class="form-group">
                                         <div class="form-group">
-                                            <label>特性ID</label>
+                                            <label>ID</label>
                                             <input name="id" type="text" class="form-control" readonly
                                                    :value="change_speciality_data.id">
                                         </div>
                                         <div class="form-group">
-                                            <label>特性名称<span class="text-danger">*</span></label>
+                                            <label>名称<span class="text-danger">*</span></label>
                                             <input name="name" type="text" class="form-control" placeholder="985"
                                                    :value="change_speciality_data.name">
                                         </div>
@@ -132,12 +132,12 @@
                                 <form id="typeManagerAddModalForm">
                                     <div class="form-group">
                                         <div class="form-group">
-                                            <label>特性ID</label>
+                                            <label>ID</label>
                                             <input name="id" type="text" class="form-control" readonly
                                                    :value="change_type_data.id">
                                         </div>
                                         <div class="form-group">
-                                            <label>特性名称<span class="text-danger">*</span></label>
+                                            <label>名称<span class="text-danger">*</span></label>
                                             <input name="name" type="text" class="form-control" placeholder="综合类"
                                                    :value="change_type_data.name">
                                         </div>
@@ -160,7 +160,8 @@
             <div class="menu">
                 <p>
                     <span class="label label-default menu-label">院校性质</span>
-                    <a href="javascript:void(0)" class="btn" data-toggle="modal" data-target="#natureManagerModal">管理</a>
+                    <a href="javascript:void(0)" class="btn" data-toggle="modal"
+                       data-target="#natureManagerModal">管理</a>
                 </p>
                 <nature_list v-for="nature in nature_data"
                              v-bind:nature="nature"
@@ -191,13 +192,13 @@
                                 <form id="natureManagerAddModalForm">
                                     <div class="form-group">
                                         <div class="form-group">
-                                            <label>特性ID</label>
+                                            <label>ID</label>
                                             <input name="id" type="text" class="form-control" readonly
                                                    :value="change_nature_data.id">
                                         </div>
                                         <div class="form-group">
-                                            <label>特性名称<span class="text-danger">*</span></label>
-                                            <input name="name" type="text" class="form-control" placeholder="综合类"
+                                            <label>名称<span class="text-danger">*</span></label>
+                                            <input name="name" type="text" class="form-control" placeholder="高等院校"
                                                    :value="change_nature_data.name">
                                         </div>
                                     </div>
@@ -337,7 +338,8 @@
                 <div class="menu">
                     <p>
                         <span class="label label-default menu-label">地区</span>
-                        <a href="javascript:void(0)" class="btn" data-toggle="modal" data-target="#locationManagerModal">管理</a>
+                        <a href="javascript:void(0)" class="btn" data-toggle="modal"
+                           data-target="#locationManagerModal">管理</a>
                     </p>
                     <div id="locationManagerModal" class="modal fade"
                          tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
@@ -363,16 +365,14 @@
                                     </form>
                                     <form id="locationManagerAddModalForm">
                                         <div class="form-group">
-                                            <div class="form-group">
-                                                <label>ID</label>
-                                                <input name="id" type="text" class="form-control" readonly
-                                                       :value="change_location_data.id">
-                                            </div>
-                                            <div class="form-group">
-                                                <label>名称<span class="text-danger">*</span></label>
-                                                <input name="name" type="text" class="form-control" placeholder="综合类"
-                                                       :value="change_location_data.name">
-                                            </div>
+                                            <label>ID</label>
+                                            <input name="id" type="text" class="form-control" readonly
+                                                   :value="change_location_data.id">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>名称<span class="text-danger">*</span></label>
+                                            <input name="name" type="text" class="form-control" placeholder="杭州"
+                                                   :value="change_location_data.name">
                                         </div>
                                     </form>
                                 </div>
@@ -601,8 +601,9 @@
 </div>
 
 <footer class="footer">
-    <p>陈健&nbsp;孟凡锦&nbsp;王浩银&nbsp;汪恒</p>
-    <p>所有数据均来自网络搜集，仅供参考</p>
+    <p>陈健(演讲)&nbsp;王浩银(PPT制作)&nbsp;孟凡锦(爬虫数据收集、文档编写)&nbsp;汪恒(代码实现)</p>
+    <p>后端框架:SpringBoot&nbsp;前端框架:Vue.js&nbsp;数据库:MySQL</p>
+    <p>所有数据均来自网络搜集，仅供演示</p>
 </footer>
 
 <script type="text/javascript" src="js/canvas-nest.min.js">!function () {

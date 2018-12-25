@@ -2,11 +2,9 @@ package cn.edu.zcmu.WebDataBase.service;
 
 import cn.edu.zcmu.WebDataBase.dao.NatureDao;
 import cn.edu.zcmu.WebDataBase.entity.Nature;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

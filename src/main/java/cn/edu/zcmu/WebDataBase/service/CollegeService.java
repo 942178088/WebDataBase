@@ -2,7 +2,6 @@ package cn.edu.zcmu.WebDataBase.service;
 
 import cn.edu.zcmu.WebDataBase.dao.CollegeDao;
 import cn.edu.zcmu.WebDataBase.entity.College;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,10 +21,6 @@ public class CollegeService extends BaseService<College, Integer> {
     @Override
     public PagingAndSortingRepository<College, Integer> getDao() {
         return collegeDao;
-    }
-
-    public void deleteCollegeByNatureId(Integer nature_id) {
-        collegeDao.deleteCollegeByNatureId(nature_id);
     }
 
     /**

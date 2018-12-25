@@ -14,6 +14,15 @@ public class ProfessionalService extends BaseService<Professional, Integer> {
     @Autowired
     private ProfessionalDao professionalDao;
 
+    public boolean findRepeat(Integer institute_id, Integer kind_id, Integer subject_id) {
+        Professional professional = professionalDao.findRepeat(institute_id, kind_id, subject_id);
+        if (professional != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public PagingAndSortingRepository<Professional, Integer> getDao() {
         return professionalDao;

@@ -1,8 +1,10 @@
 package cn.edu.zcmu.WebDataBase.controller;
 
+import cn.edu.zcmu.WebDataBase.entity.College;
 import cn.edu.zcmu.WebDataBase.entity.Institute;
 import cn.edu.zcmu.WebDataBase.entity.Professional;
 import cn.edu.zcmu.WebDataBase.service.BaseService;
+import cn.edu.zcmu.WebDataBase.service.CollegeService;
 import cn.edu.zcmu.WebDataBase.service.InstituteService;
 import cn.edu.zcmu.WebDataBase.service.ProfessionalService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,6 +33,9 @@ public class InstituteController extends BaseController<Institute, Integer> {
     @Resource
     private ProfessionalService professionalService;
 
+    @Resource
+    private CollegeService collegeService;
+
     @Override
     public BaseService<Institute, Integer> getService() {
         return instituteService;
@@ -47,6 +52,7 @@ public class InstituteController extends BaseController<Institute, Integer> {
     @ResponseBody
     @PostMapping("/add")
     public ObjectNode add(Institute institute) {
+        institute.setCollege(collegeService.findById(institute.getCollege().getId()));
         json = mapper.createObjectNode();
         if (BaseService.checkNullStr(institute.getName())) {
             json.put(STATUS_NAME, STATUS_CODE_FILED);
@@ -84,6 +90,7 @@ public class InstituteController extends BaseController<Institute, Integer> {
                 professionalJson.put("name", professional.getSubject().getName());
                 professionalJson.put("code", professional.getSubject().getsCode());
                 professionalJson.put("category", professional.getSubject().getCategory().getName());
+                professionalJson.put("kind", professional.getKind().getName());
                 professionalJsons.add(professionalJson);
             }
             institureJson.set("professional", professionalJsons);

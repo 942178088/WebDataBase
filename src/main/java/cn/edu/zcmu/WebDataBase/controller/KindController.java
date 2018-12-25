@@ -21,13 +21,13 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/kind")
-public class KindController extends BaseController<Kind,Integer> {
+public class KindController extends BaseController<Kind, Integer> {
     @Resource
     private KindService kindService;
 
     @Override
     public BaseService<Kind, Integer> getService() {
-        return null;
+        return kindService;
     }
 
     @Autowired
@@ -52,21 +52,4 @@ public class KindController extends BaseController<Kind,Integer> {
         return json;
     }
 
-    @ResponseBody
-    @PostMapping("/add")
-    public ObjectNode add(Kind kind) {
-        json = mapper.createObjectNode();
-        if (BaseService.checkNullStr(kind.getName())) {
-            json.put(STATUS_NAME, STATUS_CODE_FILED);
-            return json;
-        }
-        try {
-            kindService.save(kind);
-            json.put(STATUS_NAME, STATUS_CODE_SUCCESS);
-        } catch (Exception e) {
-            json.put(STATUS_NAME, STATUS_CODE_EXCEPTION);
-            json.put("msg", e.getMessage());
-        }
-        return json;
-    }
 }

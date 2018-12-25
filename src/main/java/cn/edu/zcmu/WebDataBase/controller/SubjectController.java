@@ -1,7 +1,9 @@
 package cn.edu.zcmu.WebDataBase.controller;
 
+import cn.edu.zcmu.WebDataBase.entity.Category;
 import cn.edu.zcmu.WebDataBase.entity.Subject;
 import cn.edu.zcmu.WebDataBase.service.BaseService;
+import cn.edu.zcmu.WebDataBase.service.CategoryService;
 import cn.edu.zcmu.WebDataBase.service.SubjectService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -23,8 +25,8 @@ import java.util.List;
 public class SubjectController extends BaseController<Subject, Integer> {
     @Resource
     private SubjectService subjectService;
-    private ObjectMapper mapper;
-    private ObjectNode json;
+    @Resource
+    private CategoryService categoryService;
 
     @Override
     public BaseService<Subject, Integer> getService() {
@@ -34,6 +36,19 @@ public class SubjectController extends BaseController<Subject, Integer> {
     @Autowired
     public SubjectController(ObjectMapper mapper) {
         this.mapper = mapper;
+    }
+
+    @Override
+    public ObjectNode add(Subject subject) {
+        if (subject.getFather_subject() != null) {
+            if (subject.getFather_subject().getId() == -1) {
+                subject.setFather_subject(null);
+            } else {
+                subject.setFather_subject(subjectService.findById(subject.getFather_subject().getId()));
+            }
+        }
+        subject.setCategory(categoryService.findById(subject.getCategory().getId()));
+        return super.add(subject);
     }
 
     /**
