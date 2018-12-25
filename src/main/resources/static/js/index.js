@@ -11,6 +11,8 @@ var main = new Vue({
         college_data: [],
         change_college_data: {},
         change_speciality_data: {},
+        change_type_data: {},
+        change_nature_data: {},
         type_data: [],
         select_data: {
             speciality_id: [],
@@ -79,28 +81,140 @@ var main = new Vue({
             }
         });
         loadSpeciality();
-        // 加载性质列表 高等院校 科研机构
-        $.ajax({
-            url: 'nature/list',
-            type: 'GET',
-            success: function (data) {
-                main.nature_data = data.natures;
-            }
-        });
-        // 加载类别列表 综合 理工
-        $.ajax({
-            url: 'type/list',
-            type: 'GET',
-            success: function (data) {
-                main.type_data = data.types;
-                loadCollege();
-            }
-        });
+        loadNature();
+        loadType();
     },
 });
 
+// 加载性质列表 高等院校 科研机构
+function loadNature() {
+    $.ajax({
+        url: 'nature/list',
+        type: 'GET',
+        success: function (data) {
+            main.nature_data = data.natures;
+        }
+    });
+}
+
+// 删除院校特性
+$("#natureManagerModalFormDelete").click(function () {
+    $.ajax({
+        url: '../nature/delete?id=' + $("#natureManagerSelect").val(),
+        type: 'GET',
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                location.replace("../index.html");
+            }
+            alert(statusCodeToAlert(status));
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+// 修改或保存院校特性
+$("#natureManagerModalFormSubmit").click(function () {
+    $.ajax({
+        url: '../nature/add',
+        type: 'POST',
+        data: $("#natureManagerAddModalForm").serialize(),
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                loadNature();
+                $("#natureManagerModal").modal('hide');
+            }
+            alert(statusCodeToAlert(status));
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+// 修改院校特性
+$("#natureManagerSelect").change(function () {
+    $.ajax({
+        url: '../nature/findById?id=' + $("#natureManagerSelect").val(),
+        type: 'GET',
+        success: function (json) {
+            main.change_nature_data = json;
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+// 加载类别列表 综合 理工
+function loadType() {
+    $.ajax({
+        url: 'type/list',
+        type: 'GET',
+        success: function (data) {
+            main.type_data = data.types;
+            loadCollege();
+        }
+    });
+}
+
+// 删除院校类别
+$("#typeManagerModalFormDelete").click(function () {
+    $.ajax({
+        url: '../type/delete?id=' + $("#typeManagerSelect").val(),
+        type: 'GET',
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                location.replace("../index.html");
+            }
+            alert(statusCodeToAlert(status));
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+// 修改或保存院校类别
+$("#typeManagerModalFormSubmit").click(function () {
+    $.ajax({
+        url: '../type/add',
+        type: 'POST',
+        data: $("#typeManagerAddModalForm").serialize(),
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                loadType();
+                $("#typeManagerModal").modal('hide');
+            }
+            alert(statusCodeToAlert(status));
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+// 修改院校类别
+$("#typeManagerSelect").change(function () {
+    $.ajax({
+        url: '../type/findById?id=' + $("#typeManagerSelect").val(),
+        type: 'GET',
+        success: function (json) {
+            main.change_type_data = json;
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+// 加载特性列表 985 211
 function loadSpeciality() {
-    // 加载特性列表 985 211
     $.ajax({
         url: 'speciality/list',
         type: 'GET',

@@ -15,7 +15,7 @@ public interface NatureDao extends PagingAndSortingRepository<Nature, Integer> {
     /**
      * 获取全部ID列表
      */
-    @Query(value = "SELECT n.id FROM natures n;", nativeQuery = true)
+    @Query(value = "SELECT n.id FROM natures n", nativeQuery = true)
     List<Integer> getAllId();
 
     /**

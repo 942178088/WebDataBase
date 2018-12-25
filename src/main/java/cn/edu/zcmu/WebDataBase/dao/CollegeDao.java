@@ -3,8 +3,10 @@ package cn.edu.zcmu.WebDataBase.dao;
 import cn.edu.zcmu.WebDataBase.entity.College;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,6 +14,11 @@ import java.util.List;
  * 院校 数据层
  */
 public interface CollegeDao extends PagingAndSortingRepository<College, Integer> {
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM colleges WHERE c_nature_id = ?1", nativeQuery = true)
+    void deleteCollegeByNatureId(Integer id);
 
     @Query(value = "SELECT * FROM colleges c WHERE c.name = ?1", nativeQuery = true)
     College findByName(String name);

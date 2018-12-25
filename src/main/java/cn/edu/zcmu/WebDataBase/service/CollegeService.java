@@ -24,6 +24,10 @@ public class CollegeService extends BaseService<College, Integer> {
         return collegeDao;
     }
 
+    public void deleteCollegeByNatureId(Integer nature_id) {
+        collegeDao.deleteCollegeByNatureId(nature_id);
+    }
+
     /**
      * 根据院校代码查询
      */

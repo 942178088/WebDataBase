@@ -42,14 +42,12 @@
             <div class="menu">
                 <p>
                     <span class="label label-default menu-label">院校特性</span>
+                    <a href="javascript:void(0)" class="btn" data-toggle="modal" data-target="#specialityManagerModal">管理</a>
                 </p>
                 <speciality_list v-for="speciality in speciality_data"
                                  v-bind:speciality="speciality"
                                  v-bind:key="speciality.id">
                 </speciality_list>
-                <button class="btn btn-primary" data-toggle="modal" data-target="#specialityManagerModal">
-                    管理
-                </button>
                 <div id="specialityManagerModal" class="modal fade"
                      tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
                     <div class="modal-dialog" role="document">
@@ -103,20 +101,120 @@
             <div class="menu">
                 <p>
                     <span class="label label-default menu-label">院校类别</span>
+                    <a href="javascript:void(0)" class="btn" data-toggle="modal" data-target="#typeManagerModal">管理</a>
                 </p>
                 <type_list v-for="type in type_data"
                            v-bind:type="type"
                            v-bind:key="type.id">
                 </type_list>
+                <div id="typeManagerModal" class="modal fade"
+                     tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="typeManagerModalLabel">管理院校类别</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form id="typeManagerModalForm">
+                                    <div class="form-group">
+                                        <label>院校类别</label>
+                                        <select id="typeManagerSelect" class="form-control">
+                                            <option value="-1">- 添加院校类别 -</option>
+                                            <option v-for="type in type_data"
+                                                    :value="type.id">
+                                                {{type.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </form>
+                                <form id="typeManagerAddModalForm">
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label>特性ID</label>
+                                            <input name="id" type="text" class="form-control" readonly
+                                                   :value="change_type_data.id">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>特性名称<span class="text-danger">*</span></label>
+                                            <input name="name" type="text" class="form-control" placeholder="综合类"
+                                                   :value="change_type_data.name">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button id="typeManagerModalFormDelete" type="button" class="btn btn-danger">
+                                    删除
+                                </button>
+                                <button id="typeManagerModalFormSubmit" type="button" class="btn btn-primary">
+                                    保存
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="menu">
                 <p>
                     <span class="label label-default menu-label">院校性质</span>
+                    <a href="javascript:void(0)" class="btn" data-toggle="modal" data-target="#natureManagerModal">管理</a>
                 </p>
                 <nature_list v-for="nature in nature_data"
                              v-bind:nature="nature"
                              v-bind:key="nature.id">
                 </nature_list>
+                <div id="natureManagerModal" class="modal fade"
+                     tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button nature="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="natureManagerModalLabel">管理院校性质</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form id="natureManagerModalForm">
+                                    <div class="form-group">
+                                        <label>院校性质</label>
+                                        <select id="natureManagerSelect" class="form-control">
+                                            <option value="-1">- 添加院校性质 -</option>
+                                            <option v-for="nature in nature_data"
+                                                    :value="nature.id">
+                                                {{nature.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </form>
+                                <form id="natureManagerAddModalForm">
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label>特性ID</label>
+                                            <input name="id" type="text" class="form-control" readonly
+                                                   :value="change_nature_data.id">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>特性名称<span class="text-danger">*</span></label>
+                                            <input name="name" type="text" class="form-control" placeholder="综合类"
+                                                   :value="change_nature_data.name">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button id="natureManagerModalFormDelete" type="button" class="btn btn-danger">
+                                    删除
+                                </button>
+                                <button id="natureManagerModalFormSubmit" type="button" class="btn btn-primary">
+                                    保存
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="menu">
                 <a id="more_menu" href="javascript:void(0)">
@@ -128,9 +226,7 @@
                     <p>
                         <span class="label label-default menu-label">操作</span>
                     </p>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
-                        添加院校
-                    </button>
+                    <a href="javascript:void(0)" class="btn" data-toggle="modal" data-target="#addModal">添加院校</a>
                     <div id="addModal" class="modal fade"
                          tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
                         <div class="modal-dialog" role="document">
