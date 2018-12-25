@@ -35,6 +35,16 @@ public class SpecialityController extends BaseController<Speciality, Integer> {
         this.mapper = mapper;
     }
 
+    @Override
+    public ObjectNode add(Speciality speciality) {
+        if (BaseService.checkNullStr(speciality.getName())) {
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+            return json;
+        } else {
+            return super.add(speciality);
+        }
+    }
+
     /**
      * 获取院校特性列表
      */

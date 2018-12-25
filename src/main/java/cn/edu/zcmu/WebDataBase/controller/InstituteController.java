@@ -1,6 +1,5 @@
 package cn.edu.zcmu.WebDataBase.controller;
 
-import cn.edu.zcmu.WebDataBase.entity.College;
 import cn.edu.zcmu.WebDataBase.entity.Institute;
 import cn.edu.zcmu.WebDataBase.entity.Professional;
 import cn.edu.zcmu.WebDataBase.service.BaseService;
@@ -58,7 +57,9 @@ public class InstituteController extends BaseController<Institute, Integer> {
             json.put(STATUS_NAME, STATUS_CODE_FILED);
             return json;
         }
-        institute.setiTime(new Date());
+        if (institute.getiTime() == null) {
+            institute.setiTime(new Date());
+        }
         try {
             instituteService.save(institute);
             json.put(STATUS_NAME, STATUS_CODE_SUCCESS);

@@ -1,6 +1,5 @@
 package cn.edu.zcmu.WebDataBase.controller;
 
-import cn.edu.zcmu.WebDataBase.entity.Category;
 import cn.edu.zcmu.WebDataBase.entity.Subject;
 import cn.edu.zcmu.WebDataBase.service.BaseService;
 import cn.edu.zcmu.WebDataBase.service.CategoryService;
@@ -46,6 +45,9 @@ public class SubjectController extends BaseController<Subject, Integer> {
             } else {
                 subject.setFather_subject(subjectService.findById(subject.getFather_subject().getId()));
             }
+        } else if (BaseService.checkNullStr(subject.getName()) || BaseService.checkNullStr(subject.getsCode())) {
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+            return json;
         }
         subject.setCategory(categoryService.findById(subject.getCategory().getId()));
         return super.add(subject);

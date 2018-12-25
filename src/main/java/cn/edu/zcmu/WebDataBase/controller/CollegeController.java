@@ -1,7 +1,6 @@
 package cn.edu.zcmu.WebDataBase.controller;
 
 import cn.edu.zcmu.WebDataBase.entity.College;
-import cn.edu.zcmu.WebDataBase.entity.Institute;
 import cn.edu.zcmu.WebDataBase.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -46,16 +45,6 @@ public class CollegeController extends BaseController<College, Integer> {
     @Autowired
     public CollegeController(ObjectMapper mapper) {
         this.mapper = mapper;
-    }
-
-    @Override
-    public ObjectNode delete(Integer id) {
-        // 删除学院下属的学院的专业
-        professionalService.deleteByCollege(id);
-        // 删除学院下属的学院
-        instituteService.deleteByCollege(id);
-        // 删除院校
-        return super.delete(id);
     }
 
     @Override

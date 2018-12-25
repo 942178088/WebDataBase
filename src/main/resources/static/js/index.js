@@ -360,8 +360,10 @@ function updateCollege(id) {
         type: 'GET',
         success: function (json) {
             main.change_college_data = json;
-            var time = Format(getDate(main.change_college_data.foundingYear.toString()), "yyyy-MM-dd")
-            main.change_college_data.foundingYear = time;
+            if (main.change_college_data.foundingYear != null) {
+                var time = Format(getDate(main.change_college_data.foundingYear.toString()), "yyyy-MM-dd");
+                main.change_college_data.foundingYear = time;
+            }
             var id = [];
             for (var i = 0; i < main.change_college_data.specialities.length; i++) {
                 id.push(main.change_college_data.specialities[i].id);

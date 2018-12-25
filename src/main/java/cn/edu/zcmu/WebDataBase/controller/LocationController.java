@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,6 +32,16 @@ public class LocationController extends BaseController<Location, Integer> {
     @Autowired
     public LocationController(ObjectMapper mapper) {
         this.mapper = mapper;
+    }
+
+    @Override
+    public ObjectNode add(Location location) {
+        if (BaseService.checkNullStr(location.getName())) {
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+            return json;
+        } else {
+            return super.add(location);
+        }
     }
 
     /**

@@ -35,6 +35,16 @@ public class TypeController extends BaseController<Type, Integer> {
         this.mapper = mapper;
     }
 
+    @Override
+    public ObjectNode add(Type type) {
+        if (BaseService.checkNullStr(type.getName())) {
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+            return json;
+        } else {
+            return super.add(type);
+        }
+    }
+
     /**
      * 获取院校类型列表
      */

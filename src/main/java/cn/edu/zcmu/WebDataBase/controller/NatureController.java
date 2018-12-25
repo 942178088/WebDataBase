@@ -35,6 +35,16 @@ public class NatureController extends BaseController<Nature, Integer> {
         this.mapper = mapper;
     }
 
+    @Override
+    public ObjectNode add(Nature nature) {
+        if (BaseService.checkNullStr(nature.getName())) {
+            json.put(STATUS_NAME, STATUS_CODE_FILED);
+            return json;
+        } else {
+            return super.add(nature);
+        }
+    }
+
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ObjectNode list() {
