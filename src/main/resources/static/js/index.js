@@ -13,6 +13,7 @@ var main = new Vue({
         change_speciality_data: {},
         change_type_data: {},
         change_nature_data: {},
+        change_location_data: {},
         type_data: [],
         select_data: {
             speciality_id: [],
@@ -72,18 +73,74 @@ var main = new Vue({
         },
     },
     created: function () {
-        // 加载地区列表
-        $.ajax({
-            url: 'location/list',
-            type: 'GET',
-            success: function (data) {
-                main.location_data = data.locations;
-            }
-        });
+        loadLocation();
         loadSpeciality();
         loadNature();
         loadType();
     },
+});
+
+// 加载地区列表
+function loadLocation() {
+    $.ajax({
+        url: 'location/list',
+        type: 'GET',
+        success: function (data) {
+            main.location_data = data.locations;
+        }
+    });
+}
+
+// 删除院校特性
+$("#locationManagerModalFormDelete").click(function () {
+    $.ajax({
+        url: '../location/delete?id=' + $("#locationManagerSelect").val(),
+        type: 'GET',
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                location.replace("../index.html");
+            }
+            alert(statusCodeToAlert(status));
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+// 修改或保存院校特性
+$("#locationManagerModalFormSubmit").click(function () {
+    $.ajax({
+        url: '../location/add',
+        type: 'POST',
+        data: $("#locationManagerAddModalForm").serialize(),
+        success: function (json) {
+            var status = json.status;
+            if (statusCodeToBool(status)) {
+                loadLocation();
+                $("#locationManagerModal").modal('hide');
+            }
+            alert(statusCodeToAlert(status));
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
+});
+
+// 修改院校特性
+$("#locationManagerSelect").change(function () {
+    $.ajax({
+        url: '../location/findById?id=' + $("#locationManagerSelect").val(),
+        type: 'GET',
+        success: function (json) {
+            main.change_location_data = json;
+        },
+        error: function () {
+            alert("网络异常")
+        }
+    });
 });
 
 // 加载性质列表 高等院校 科研机构

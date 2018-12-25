@@ -171,7 +171,7 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button nature="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span></button>
                                 <h4 class="modal-title" id="natureManagerModalLabel">管理院校性质</h4>
                             </div>
@@ -337,7 +337,57 @@
                 <div class="menu">
                     <p>
                         <span class="label label-default menu-label">地区</span>
+                        <a href="javascript:void(0)" class="btn" data-toggle="modal" data-target="#locationManagerModal">管理</a>
                     </p>
+                    <div id="locationManagerModal" class="modal fade"
+                         tabindex="-1" role="dialog" aria-labelledby="addModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="locationManagerModalLabel">管理地区</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="locationManagerModalForm">
+                                        <div class="form-group">
+                                            <label>地区</label>
+                                            <select id="locationManagerSelect" class="form-control">
+                                                <option value="-1">- 添加地区 -</option>
+                                                <option v-for="location in location_data"
+                                                        :value="location.id">
+                                                    {{location.name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                    <form id="locationManagerAddModalForm">
+                                        <div class="form-group">
+                                            <div class="form-group">
+                                                <label>ID</label>
+                                                <input name="id" type="text" class="form-control" readonly
+                                                       :value="change_location_data.id">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>名称<span class="text-danger">*</span></label>
+                                                <input name="name" type="text" class="form-control" placeholder="综合类"
+                                                       :value="change_location_data.name">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button id="locationManagerModalFormDelete" type="button" class="btn btn-danger">
+                                        删除
+                                    </button>
+                                    <button id="locationManagerModalFormSubmit" type="button" class="btn btn-primary">
+                                        保存
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <location_list v-for="location in location_data"
                                    v-bind:location="location"
                                    v-bind:key="location.id">
