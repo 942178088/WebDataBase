@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>主页 - 考研数据库</title>
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/base.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/base.css" rel="stylesheet">
 
     <!--[if lt IE 9]>
     <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -19,12 +19,15 @@
     <div class="row">
 
         <div class="col-sm-12 text-center logo">
-            <img src="img/logo.png" class="img-responsive" alt="Responsive image">
+            <img src="../img/logo.png" class="img-responsive" alt="Responsive image">
         </div>
 
         <div class="col-sm-12">
             <ol class="breadcrumb">
                 <li class="active">主页</li>
+            </ol>
+            <ol class="breadcrumb">
+                <h3 th:text="登录成功"></h3><a href="/user/logout">注销</a>
             </ol>
         </div>
 
