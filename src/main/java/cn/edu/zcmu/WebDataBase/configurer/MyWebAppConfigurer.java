@@ -1,4 +1,4 @@
-package cn.edu.zcmu.WebDataBase;
+package cn.edu.zcmu.WebDataBase.configurer;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,14 +8,15 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 @Component
-public class MyWebAppConfigurer  extends WebMvcConfigurationSupport {
+public class MyWebAppConfigurer extends WebMvcConfigurationSupport {
 
     @Autowired
     private URLInterceptor urlInterceptor;
 
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(urlInterceptor).addPathPatterns("/**").excludePathPatterns("login.html","/user/login","/user/loginVerify");
+        registry.addInterceptor(urlInterceptor).
+                addPathPatterns("/**/add", "/**/delete");
         super.addInterceptors(registry);
     }
 

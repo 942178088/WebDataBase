@@ -1,4 +1,4 @@
-package cn.edu.zcmu.WebDataBase;
+package cn.edu.zcmu.WebDataBase.configurer;
 
 
 import org.springframework.stereotype.Component;
@@ -14,13 +14,11 @@ public class URLInterceptor implements HandlerInterceptor{
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)throws  Exception{
         HttpSession session = request.getSession();
-
-//            判断是否已有该用户登录的session
+        // 判断是否已有该用户登录的session
         if(session.getAttribute(SESSION_KEY) != null){
             return true;
         }
-
-//            跳转到登录页
+        // 跳转到登录页
         response.sendRedirect("/user/login");
         return false;
     }
