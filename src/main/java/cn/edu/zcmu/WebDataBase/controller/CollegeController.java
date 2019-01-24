@@ -32,10 +32,6 @@ public class CollegeController extends BaseController<College, Integer> {
     private SpecialityService specialityService;
     @Resource
     private TypeService typeService;
-    @Resource
-    private InstituteService instituteService;
-    @Resource
-    private ProfessionalService professionalService;
 
     @Override
     public BaseService<College, Integer> getService() {
@@ -47,6 +43,9 @@ public class CollegeController extends BaseController<College, Integer> {
         this.mapper = mapper;
     }
 
+    /**
+     * 重写 增 / 删
+     */
     @Override
     public ObjectNode add(College college) {
         if (college.getcNature().getId() != null) {
@@ -67,6 +66,9 @@ public class CollegeController extends BaseController<College, Integer> {
         }
     }
 
+    /**
+     * 根据ID或者代码查询院校
+     */
     @GetMapping(value = "/{idOrCode}")
     public String one(@PathVariable("idOrCode") String idOrCode, Map<String, Object> map) {
         College college;

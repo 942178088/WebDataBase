@@ -35,6 +35,14 @@ public class CategoryController extends BaseController<Category, Integer> {
         this.mapper = mapper;
     }
 
+    /**
+     * 添加测试数据
+     * 数据来源为四个爬虫收集的txt文件
+     * src/yuanxiao.txt
+     * src/yuanxiao_cate.txt
+     * src/yuanxiao_detail.txt
+     * src/yuanxiao_pro.txt
+     */
     @ResponseBody
     @GetMapping("/test")
     public String test() {
@@ -65,6 +73,9 @@ public class CategoryController extends BaseController<Category, Integer> {
         return json;
     }
 
+    /**
+     * 重写 增 / 改
+     */
     @Override
     public ObjectNode add(Category category) {
         category.setcTime(new Date());

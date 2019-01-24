@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.WebRequest;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -37,13 +36,20 @@ public abstract class BaseController<T, ID> {
 
     public abstract BaseService<T, ID> getService();
 
+    /**
+     * 格式化日期
+     * 否则页面上的input时间控件会出错
+     */
     @InitBinder
-    public void initBinder(WebDataBinder binder, WebRequest request) {
+    public void initBinder(WebDataBinder binder) {
         //转换日期 注意这里的转化要和传进来的字符串的格式一直 如2015-9-9 就应该为yyyy-MM-dd
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));// CustomDateEditor为自定义日期编辑器
     }
 
+    /**
+     * 按ID查询实体 公用方法
+     */
     @ResponseBody
     @GetMapping("/findById")
     public T findById(ID id) {
@@ -52,7 +58,7 @@ public abstract class BaseController<T, ID> {
     }
 
     /**
-     * 增 改
+     * 增 改 公用方法
      */
     @ResponseBody
     @PostMapping("/add")
@@ -71,6 +77,11 @@ public abstract class BaseController<T, ID> {
         return json;
     }
 
+    /**
+     * 删除 公用方法
+     * @param id
+     * @return
+     */
     @ResponseBody
     @GetMapping("/delete")
     public ObjectNode delete(ID id) {

@@ -47,6 +47,9 @@ jQuery(document).ready(function($) {
 
 //  状态码转换成语句
 function statusCodeToAlert(status) {
+    if(status == null) {
+        return "操作失败";
+    }
     switch (status) {
         case 0:
             return "操作成功";
@@ -72,6 +75,8 @@ function statusCodeToAlert(status) {
         case 7:
             return "重复操作";
             break;
+        default:
+            return "操作失败";
     }
 }
 

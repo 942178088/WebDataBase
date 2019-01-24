@@ -62,7 +62,7 @@
                 <p th:text="'所在地:'+${college.location.name}"></p>
                 <p th:text="'联系方式:'+${college.phoneNumber}"></p>
                 <p th:if="${college.cDescription != null}" th:text="'简介:'+${college?.cDescription}"></p>
-                <div class="mt-1 0">
+                <div class="mt-10">
                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
                         删除学校
                     </button>
